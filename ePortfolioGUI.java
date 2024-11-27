@@ -30,6 +30,9 @@ public class ePortfolioGUI extends JFrame {
     private JTextField nameField;
     private JTextField quantityField;
     private JTextField priceField; 
+    private JTextField totalGainField;
+    private JTextArea individualGainsArea;
+    
 
     private JComboBox<String> typeComboBox; // combo box for investment type
     private CardLayout cardLayout; // card layout for the panels
@@ -41,6 +44,9 @@ public class ePortfolioGUI extends JFrame {
     private JTextArea updateMessageArea;
     private JTextArea gainMessageArea;
     private JTextArea searchMessageArea;
+
+    
+
 
     
     /**
@@ -728,62 +734,50 @@ public class ePortfolioGUI extends JFrame {
             priceField.setText(String.valueOf(current.getPrice())); // set the price field to the price of the investment
         }
 
-        // action listeners for the buttons to handle the actions when they are clicked
+        // action listener for the prev button to display the previous investment
         prevButton.addActionListener(e -> {
-            // if the index is greater than 0, decrement the index and display the previous investment
-            if (index[0] > 0) {
-                index[0]--;
-                // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
-                if (portfolio.getInvestments().isEmpty()) {
-                    updateMessageArea.setText("No investments to display.");
-                    symbolField.setText("");
-                    nameField.setText("");
-                    priceField.setText("");
-                } 
-                // otherwise display the previous investment
-                else {
-                    Investment previous = portfolio.getInvestments().get(index[0]); // get the previous investment
-                    symbolField.setText(previous.getSymbol()); // set the symbol field to the symbol of the investment
-                    nameField.setText(previous.getName()); // set the name field to the name of the investment
-                    priceField.setText(String.valueOf(previous.getPrice())); // set the price field to the price of the investment
-                }
+            // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
+            if (portfolio.getInvestments().isEmpty()) {
+                updateMessageArea.setText("No investments to display."); // set the message area to show there are no investments
+                symbolField.setText(""); // clear the symbol field
+                nameField.setText(""); // clear the name field
+                priceField.setText(""); // clear the price field
+            } 
+            // otherwise, if the index is greater than 0, decrement the index and display the previous investment
+            else if (index[0] > 0) {
+                index[0]--; // decrement the index
+                Investment previous = portfolio.getInvestments().get(index[0]); // get the previous investment
+                symbolField.setText(previous.getSymbol()); // set the symbol field to the symbol of the investment
+                nameField.setText(previous.getName()); // set the name field to the name of the investment
+                priceField.setText(String.valueOf(previous.getPrice())); // set the price field to the price of the investment
+                updateMessageArea.setText(""); // clear any previous messages
             }
         });
 
         // action listener for the next button to display the next investment
         nextButton.addActionListener(e -> {
-            // if the index is less than the size of the portfolio1, increment the index and display the next investment
-            if (index[0] < portfolio.getInvestments().size() - 1) {
+            // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
+            if (portfolio.getInvestments().isEmpty()) {
+                updateMessageArea.setText("No investments to display."); // set the message area to show there are no investments
+                symbolField.setText(""); // clear the symbol field
+                nameField.setText(""); // clear the name field
+                priceField.setText(""); // clear the price field
+            } 
+            // otherwise, if the index is less than the size of the portfolio, increment the index and display the next investment
+            else if (index[0] < portfolio.getInvestments().size() - 1) {
                 index[0]++; // increment the index
-                // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
-                if (portfolio.getInvestments().isEmpty()) {
-                    updateMessageArea.setText("No investments to display.");
-                    symbolField.setText("");
-                    nameField.setText("");
-                    priceField.setText("");
-                } 
-                // otherwise display the next investment
-                else {
-                    Investment next = portfolio.getInvestments().get(index[0]); // get the next investment
-                    symbolField.setText(next.getSymbol()); // set the symbol field to the symbol of the investment
-                    nameField.setText(next.getName()); // set the name field to the name of the investment
-                    priceField.setText(String.valueOf(next.getPrice())); // set the price field to the price of the investment
-                }
+                Investment next = portfolio.getInvestments().get(index[0]); // get the next investment
+                symbolField.setText(next.getSymbol()); // set the symbol field to the symbol of the investment
+                nameField.setText(next.getName()); // set the name field to the name of the investment
+                priceField.setText(String.valueOf(next.getPrice())); // set the price field to the price of the investment
+                updateMessageArea.setText(""); // clear any previous messages
             }
         });
 
+
         // action listener for the save button to save the updated price of the investment
-        saveButton.addActionListener(e -> {
-            // try catch block to handle the if the user enters an invalid value for the price
-            try {
-                double newPrice = Double.parseDouble(priceField.getText().trim()); // get the new price from the field
-                portfolio.getInvestments().get(index[0]).setPrice(newPrice); // set the new price of the investment
-                updateMessageArea.setText("Price updated successfully."); // display the success message
-            } 
-            catch (NumberFormatException ex) {
-                updateMessageArea.setText("Sorry, please enter a valid value for price.");
-            }
-        });
+        saveButton.addActionListener(e -> handleUpdateAction(priceField, index[0]));
+
 
         // add the left and right panels to a split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
@@ -868,11 +862,10 @@ public class ePortfolioGUI extends JFrame {
         // panel for the gain panel
         JPanel gainPanel = new JPanel(new BorderLayout());
         gainPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10)); 
-    
+
         // main panel for the gain panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-    
         
         /* ~~ title for getting total gain ~~ */
         JLabel titleLabel = new JLabel("Getting total gain");
@@ -880,36 +873,36 @@ public class ePortfolioGUI extends JFrame {
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT); 
         mainPanel.add(titleLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 30)));  // add space between the title and the total gain label
-        
+
         /* ~~ panel for the total gain label ~~ */
         JPanel totalGainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel totalGainLabel = new JLabel("Total gain");
         totalGainLabel.setFont(new Font(totalGainLabel.getFont().getName(), Font.PLAIN, 16));
         totalGainPanel.add(totalGainLabel);
-    
+
         /* ~~ panel for the total gain field ~~ */
-        JTextField totalGainField = new JTextField(10);
+        totalGainField = new JTextField(10); 
         totalGainField.setPreferredSize(new Dimension(100, 25));
         totalGainField.setEditable(false);  // not editable by the user
         totalGainPanel.add(totalGainField);
         totalGainPanel.setAlignmentX(Component.LEFT_ALIGNMENT); 
         mainPanel.add(totalGainPanel);
-    
+
         mainPanel.add(Box.createRigidArea(new Dimension(0, 15))); 
-    
+
         /* ~~ label for individual gains ~~ */
         JLabel individualGainsLabel = new JLabel("Individual gains");
         individualGainsLabel.setFont(new Font(individualGainsLabel.getFont().getName(), Font.PLAIN, 16));
         individualGainsLabel.setAlignmentX(Component.LEFT_ALIGNMENT); 
         mainPanel.add(individualGainsLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-    
+
         /* ~~ text area for the individual gains ~~ */
-        JTextArea individualGainsArea = new JTextArea(15, 40); 
+        individualGainsArea = new JTextArea(15, 40); 
         individualGainsArea.setEditable(false);  // not editable by the user
         individualGainsArea.setLineWrap(true);  // wrap the text so that it fits in the text area
         individualGainsArea.setWrapStyleWord(true); // wrap the text at words instead of letters, so that words are not split in half
-    
+
         /* ~~ scroll pane for the text area ~~ */
         JScrollPane gainsScrollPane = new JScrollPane(individualGainsArea);
         gainsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  // always show the vertical scroll bar
@@ -917,48 +910,40 @@ public class ePortfolioGUI extends JFrame {
         gainsScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT); 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 5))); 
         mainPanel.add(gainsScrollPane);
- 
-        double totalGain; // variable to hold the total gain of the portfolio
-        String individualGainsText; // variable to hold the individual gains text for each investment
-    
-        // calculate the total gain and display it in the total gain field
-        totalGain = portfolio.calculateTotalGain(); 
-        totalGainField.setText(String.format("%.2f", totalGain));  // set the total gain field to the total gain
-    
-        
-        individualGainsText = ""; // set the individual gains text to an empty string
-        // loop through the investments in the portfolio to calculate the gain for each investment
-        for (int i = 0; i < portfolio.getInvestments().size(); i++) {
 
-            Investment investment; // variable to hold the investment object
-            String investmentType; // variable to hold the type of investment
-            double gain = 0.0; // variable to hold the gain of the investment
-            investment = portfolio.getInvestments().get(i); // get the investment at the current index
-
-            investmentType = ""; // set the investment type to an empty string
-            
-    
-            // if the investment is a stock, calculate the gain for the stock
-            if (investment instanceof Stock) {
-                investmentType = "Stock"; // set the investment type to stock
-                Stock stock = (Stock) investment; // cast the investment to a stock
-                gain = stock.calculateGain(); // calculate the gain for the stock
-            } 
-            // if the investment is a mutual fund, calculate the gain for the mutual fund
-            else if (investment instanceof MutualFund) {
-                investmentType = "Mutual Fund"; // set the investment type to mutual fund
-                MutualFund fund = (MutualFund) investment;  // cast the investment to a mutual fund
-                gain = fund.calculateGain(); // calculate the gain for the mutual fund
-            }
-    
-            individualGainsText += String.format("%s - Symbol: %s, Gain: %.2f%n", investmentType, investment.getSymbol(), gain);
-        }
-    
-        individualGainsArea.setText(individualGainsText); // set the text area to the individual gains text
-    
         gainPanel.add(mainPanel, BorderLayout.CENTER);
         return gainPanel;
     }
+
+
+    /**
+     * method to update the gain panel with the latest portfolio data
+     */
+    private void updateGainPanel(JTextField totalGainField, JTextArea individualGainsArea) {
+        double totalGain = portfolio.calculateTotalGain(); 
+        totalGainField.setText(String.format("%.2f", totalGain));
+
+        String individualGainsText = ""; // set the text for the individual gains blank initially
+        for (int i = 0; i < portfolio.getInvestments().size(); i++) {
+            Investment investment = portfolio.getInvestments().get(i);
+            String investmentType = "";
+            double gain = 0.0;
+
+            if (investment instanceof Stock) {
+                investmentType = " { Stock }             | "; // format the investment type (stock)
+                gain = ((Stock) investment).calculateGain();
+            } 
+            else if (investment instanceof MutualFund) {
+                investmentType = " { Mutual Fund }  | "; // format the investment type (mutual fund)
+                gain = ((MutualFund) investment).calculateGain();
+            }
+
+            // add the investment type, symbol, and gain to the text area
+            individualGainsText = individualGainsText + investmentType + " ~ " + investment.getSymbol() + " gain: " + String.format("%.2f", gain) + "\n";
+        }
+        individualGainsArea.setText(individualGainsText); // set the text area with the individual gains
+    }
+
     
     /**
      * method to create the search panel
@@ -1188,8 +1173,13 @@ public class ePortfolioGUI extends JFrame {
         buyItem.addActionListener(e -> cardLayout.show(panel, "BUY"));
         sellItem.addActionListener(e -> cardLayout.show(panel, "SELL"));
         updateItem.addActionListener(e -> cardLayout.show(panel, "UPDATE"));
-        gainItem.addActionListener(e -> cardLayout.show(panel, "GAIN"));
         searchItem.addActionListener(e -> cardLayout.show(panel, "SEARCH"));
+
+        gainItem.addActionListener(e -> {
+            cardLayout.show(panel, "GAIN");
+            System.out.println("Updating Gain Panel...");
+            updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the latest portfolio data
+        });        
 
         // add the menu items to the options menu
         options.add(buyItem);
