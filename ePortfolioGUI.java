@@ -383,6 +383,195 @@ public class ePortfolioGUI extends JFrame {
 
         } 
         catch (Exception ex) { // catch any other exceptions that could happen
-            buyMessageArea.append("Unexpected error occurred: " + ex.getMessage() + "\n");
+            buyMessageArea.append("Oops, an unexpected error occurred: " + ex.getMessage() + "\n");
         }
     }
+
+    // method to create the sell investment panel
+    private JPanel createSellPanel() {
+
+        JPanel sellPanel = new JPanel(new BorderLayout());
+        sellPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+    
+        // left side of the panel for the input fields (symbol, quantity, and price)
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+    
+        /* ~~ title panel for selling an investment ~~ */
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel titleLabel = new JLabel("Selling an investment");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // make it bold and larger text
+        // add the label to the panel
+        titlePanel.add(titleLabel); 
+        leftPanel.add(titlePanel);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // add space between the title and the input fields
+    
+        /* ~~ panel for the symbol input field ~~ */
+        JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel symbolLabel = new JLabel("Symbol ");
+        symbolLabel.setPreferredSize(new Dimension(100, 35));
+        symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField symbolField = new JTextField();
+        symbolField.setPreferredSize(new Dimension(150, 25)); 
+        // add the label and field to the panel
+        symbolPanel.add(symbolLabel);
+        symbolPanel.add(symbolField);
+        leftPanel.add(symbolPanel);
+    
+        /* ~~ panel for the quantity input field ~~ */
+        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel quantityLabel = new JLabel("Quantity ");
+        quantityLabel.setPreferredSize(new Dimension(100, 35)); 
+        quantityLabel.setFont(new Font(quantityLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField quantityField = new JTextField();
+        quantityField.setPreferredSize(new Dimension(125, 25));
+        // add the label and field to the panel
+        quantityPanel.add(quantityLabel);
+        quantityPanel.add(quantityField);
+        leftPanel.add(quantityPanel);
+    
+        /* ~~ panel for the price input field ~~ */
+        JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel priceLabel = new JLabel("Price ");
+        priceLabel.setPreferredSize(new Dimension(100, 35)); 
+        priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField priceField = new JTextField();
+        priceField.setPreferredSize(new Dimension(125, 25)); 
+        // add the label and field to the panel
+        pricePanel.add(priceLabel);
+        pricePanel.add(priceField);
+        leftPanel.add(pricePanel);
+    
+        
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space between the input fields and the message area below
+    
+        // right side of the panel for the buttons (reset and sell)
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); 
+    
+        /* ~~ panel for the reset button ~~ */
+        JButton resetButton = new JButton("Reset");
+        resetButton.setPreferredSize(new Dimension(120, 50)); 
+        resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        resetWrapper.add(resetButton); 
+    
+        /* ~~ panel for the sell button ~~ */
+        JButton sellButton = new JButton("Sell");
+        sellButton.setPreferredSize(new Dimension(120, 50)); 
+        sellButton.setFont(new Font(sellButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel sellWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sellWrapper.add(sellButton); 
+    
+        // add the buttons to the panel
+        rightPanel.add(Box.createVerticalGlue()); 
+        rightPanel.add(resetWrapper);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
+        rightPanel.add(sellWrapper);
+    
+        // add action listeners to the buttons to handle the actions when they are clicked, this was done previously in its own method for buy but i decided to do it here instead
+        resetButton.addActionListener(e -> {
+            symbolField.setText("");
+            quantityField.setText("");
+            priceField.setText("");
+            if (sellMessageArea != null){
+                sellMessageArea.setText(""); 
+            }
+        });
+        // action listener for the sell button to handle the sell action 
+        sellButton.addActionListener(e -> handleSellAction(symbolField, quantityField, priceField)); 
+    
+        // add the left and right panels to a split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        splitPane.setDividerLocation(400); 
+        splitPane.setResizeWeight(0.7); 
+        splitPane.setContinuousLayout(true);
+        splitPane.setBorder(null);
+    
+        sellPanel.add(splitPane, BorderLayout.CENTER);
+        sellPanel.add(createSellMessagePanel(), BorderLayout.SOUTH);
+    
+        return sellPanel;
+    }
+    
+    // method to create the message panel specific to the sell panel
+    private JPanel createSellMessagePanel() {
+
+        JPanel messagePanel = new JPanel(new BorderLayout());
+    
+        JLabel messageLabel = new JLabel("Messages "); // create a label for the message area
+        messageLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); 
+        messageLabel.setFont(new Font(messageLabel.getFont().getName(), Font.PLAIN, 16));
+        
+        // text area for the messages
+        sellMessageArea = new JTextArea(8, 20);
+        sellMessageArea.setEditable(false); 
+        sellMessageArea.setLineWrap(true); 
+        sellMessageArea.setWrapStyleWord(true); 
+    
+        // scroll pane for the text area
+        JScrollPane messageScrollPane = new JScrollPane(sellMessageArea);
+        messageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        messageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+    
+        messagePanel.add(messageLabel, BorderLayout.NORTH);
+        messagePanel.add(messageScrollPane, BorderLayout.CENTER);
+    
+        return messagePanel;
+    }
+    
+    // method to handle the sell action when the sell button is clicked using the sellInvestment method from my Portfolio class
+    private void handleSellAction(JTextField symbolField, JTextField quantityField, JTextField priceField) {
+        
+        sellMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
+    
+
+        String symbol = symbolField.getText().trim(); // get the symbol from the field
+        // if the symbol is empty, display an error message
+        if (symbol.isEmpty()) {
+            sellMessageArea.append("Sorry, investment symbol cannot be empty.\n");
+            return;
+        }
+    
+        int quantity;
+        // try catch block to handle the case where the user enters a non-integer value for the quantity
+        try {
+            quantity = Integer.valueOf(quantityField.getText().trim()); // get the quantity from the field
+            // if the quantity is less than or equal to 0, display an error message
+            if (quantity <= 0) {
+                sellMessageArea.append("Oops, you can't sell " + quantity + " units!\n");
+                return;
+            }
+        } 
+        catch (NumberFormatException ex) {
+            sellMessageArea.append("Sorry, please enter a valid quantity.\n");
+            return;
+        }
+    
+        double price; // variable to hold the price of the investment
+        try {
+            price = Double.valueOf(priceField.getText().trim()); // get the price from the field
+            // if the price is less than 0, display an error message
+            if (price < 0) {
+                sellMessageArea.append("Oops, you can't sell units for $" + price + "!\n");
+                return;
+            }
+        } 
+        catch (NumberFormatException ex) {
+            sellMessageArea.append("orry, please enter a valid price.\n");
+            return;
+        }
+    
+        double payment = portfolio.sellInvestment(symbol, quantity, price); // sell the investment and get the payment amount
+        // if the payment is greater than or equal to 0, display the success message with the payment amount
+        if (payment >= 0) {
+            sellMessageArea.append("Investment sold successfully. Payment: $" + String.format("%.2f", payment) + "\n");
+        } 
+        // otherwise display an error message
+        else {
+            sellMessageArea.append("Oops, investment wasn't found or an invalid quantity was entered.\n");
+        }
+    }
+    
