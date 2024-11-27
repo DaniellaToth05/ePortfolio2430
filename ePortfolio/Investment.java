@@ -3,7 +3,7 @@ package ePortfolio;
 /**
  * class to represent an investment in the portfolio
  */
-public class Investment {
+public abstract class Investment {
     private String symbol;        // symbol of the investment
     private String name;          // name of the investment
     private int quantity;         // quantity of the investment
@@ -86,14 +86,19 @@ public class Investment {
     }
 
     /**
-     * method to calculate the total value of the investment
-     * @param price the price of the investment
+     * abstract method to get a formatted string representing the investment
+     * 
+     * @return the formatted string
      */
-    public void setBookValue(double price) {
-        if(!isFromFile){
-            this.bookValue = this.quantity * price;
-        }
-    }
+    @Override
+    public abstract String toString();
+
+    /**
+     * abstract method to update the book value of the investment
+     * 
+     * @param price the current price
+     */
+    public abstract void setBookValue(double price);
 
     /** 
      * method to get the total value of the investment for files
@@ -103,6 +108,13 @@ public class Investment {
         this.bookValue = bookValue;
         this.isFromFile = true;
     }
+
+    /**
+     * abstract method to calculate the gain of the investment
+     * 
+     * @return the total gain
+     */
+    public abstract double calculateGain();
     
     /**
      * method to buy more shares of an investment and update quantity, price, and book value

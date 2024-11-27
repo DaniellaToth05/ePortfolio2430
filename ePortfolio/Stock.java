@@ -100,6 +100,7 @@ public class Stock extends Investment {
      * 
      * @return the total gain
      */
+    @Override
     public double calculateGain() {
         return (getQuantity() * getPrice()) - (bookValue + commissionFee); // gain = (current value - book value)
     }
