@@ -514,7 +514,7 @@ public class ePortfolioGUI extends JFrame {
         // scroll pane for the text area
         JScrollPane messageScrollPane = new JScrollPane(sellMessageArea);
         messageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        messageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+        messageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); 
     
         messagePanel.add(messageLabel, BorderLayout.NORTH);
         messagePanel.add(messageScrollPane, BorderLayout.CENTER);
@@ -724,10 +724,10 @@ public class ePortfolioGUI extends JFrame {
                 } 
                 // otherwise display the next investment
                 else {
-                    Investment next = portfolio.getInvestments().get(index[0]);
-                    symbolField.setText(next.getSymbol());
-                    nameField.setText(next.getName());
-                    priceField.setText(String.valueOf(next.getPrice()));
+                    Investment next = portfolio.getInvestments().get(index[0]); // get the next investment
+                    symbolField.setText(next.getSymbol()); // set the symbol field to the symbol of the investment
+                    nameField.setText(next.getName()); // set the name field to the name of the investment
+                    priceField.setText(String.valueOf(next.getPrice())); // set the price field to the price of the investment
                 }
             }
         });
@@ -776,7 +776,7 @@ public class ePortfolioGUI extends JFrame {
         // scroll pane for the text area
         JScrollPane messageScrollPane = new JScrollPane(updateMessageArea);
         messageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
-        messageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        messageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     
         // add the label and scroll pane to the panel
         messagePanel.add(messageLabel, BorderLayout.NORTH);
@@ -812,4 +812,295 @@ public class ePortfolioGUI extends JFrame {
         }
     }
 
+    // method to create the gain panel
+    private JPanel createGainPanel() {
+
+        // panel for the gain panel
+        JPanel gainPanel = new JPanel(new BorderLayout());
+        gainPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10)); 
+    
+        // main panel for the gain panel
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    
+        
+        /* ~~ title for getting total gain ~~ */
+        JLabel titleLabel = new JLabel("Getting total gain");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        mainPanel.add(titleLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 30)));  // add space between the title and the total gain label
+        
+        /* ~~ panel for the total gain label ~~ */
+        JPanel totalGainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel totalGainLabel = new JLabel("Total gain");
+        totalGainLabel.setFont(new Font(totalGainLabel.getFont().getName(), Font.PLAIN, 16));
+        totalGainPanel.add(totalGainLabel);
+    
+        /* ~~ panel for the total gain field ~~ */
+        JTextField totalGainField = new JTextField(10);
+        totalGainField.setPreferredSize(new Dimension(100, 25));
+        totalGainField.setEditable(false);  // not editable by the user
+        totalGainPanel.add(totalGainField);
+        totalGainPanel.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        mainPanel.add(totalGainPanel);
+    
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 15))); 
+    
+        /* ~~ label for individual gains ~~ */
+        JLabel individualGainsLabel = new JLabel("Individual gains");
+        individualGainsLabel.setFont(new Font(individualGainsLabel.getFont().getName(), Font.PLAIN, 16));
+        individualGainsLabel.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        mainPanel.add(individualGainsLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+    
+        /* ~~ text area for the individual gains ~~ */
+        JTextArea individualGainsArea = new JTextArea(15, 40); 
+        individualGainsArea.setEditable(false);  // not editable by the user
+        individualGainsArea.setLineWrap(true);  // wrap the text so that it fits in the text area
+        individualGainsArea.setWrapStyleWord(true); // wrap the text at words instead of letters, so that words are not split in half
+    
+        /* ~~ scroll pane for the text area ~~ */
+        JScrollPane gainsScrollPane = new JScrollPane(individualGainsArea);
+        gainsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  // always show the vertical scroll bar
+        gainsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // always show the horizontal scroll bar
+        gainsScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 5))); 
+        mainPanel.add(gainsScrollPane);
+ 
+        double totalGain; // variable to hold the total gain of the portfolio
+        String individualGainsText; // variable to hold the individual gains text for each investment
+    
+        // calculate the total gain and display it in the total gain field
+        totalGain = portfolio.calculateTotalGain(); 
+        totalGainField.setText(String.format("%.2f", totalGain));  // set the total gain field to the total gain
+    
+        
+        individualGainsText = ""; // set the individual gains text to an empty string
+        // loop through the investments in the portfolio to calculate the gain for each investment
+        for (int i = 0; i < portfolio.getInvestments().size(); i++) {
+
+            Investment investment; // variable to hold the investment object
+            String investmentType; // variable to hold the type of investment
+            double gain = 0.0; // variable to hold the gain of the investment
+            investment = portfolio.getInvestments().get(i); // get the investment at the current index
+
+            investmentType = ""; // set the investment type to an empty string
+            
+    
+            // if the investment is a stock, calculate the gain for the stock
+            if (investment instanceof Stock) {
+                investmentType = "Stock"; // set the investment type to stock
+                Stock stock = (Stock) investment; // cast the investment to a stock
+                gain = stock.calculateGain(); // calculate the gain for the stock
+            } 
+            // if the investment is a mutual fund, calculate the gain for the mutual fund
+            else if (investment instanceof MutualFund) {
+                investmentType = "Mutual Fund"; // set the investment type to mutual fund
+                MutualFund fund = (MutualFund) investment;  // cast the investment to a mutual fund
+                gain = fund.calculateGain(); // calculate the gain for the mutual fund
+            }
+    
+            individualGainsText += String.format("%s - Symbol: %s, Gain: %.2f%n", investmentType, investment.getSymbol(), gain);
+        }
+    
+        individualGainsArea.setText(individualGainsText); // set the text area to the individual gains text
+    
+        gainPanel.add(mainPanel, BorderLayout.CENTER);
+        return gainPanel;
+    }
+    
+    // method to create the search panel
+    private JPanel createSearchPanel() {
+
+        JPanel searchPanel = new JPanel(new BorderLayout());
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+    
+        // left side of the panel for the input fields (symbol, keywords, low price, and high price)
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+    
+        /* ~~ title panel for searching investments ~~ */
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel titleLabel = new JLabel("Searching investments");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // make it bold and larger text
+        titlePanel.add(titleLabel); 
+        leftPanel.add(titlePanel);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // add space between the title and the input fields
+    
+        /* ~~ panel for the symbol input field ~~ */
+        JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel symbolLabel = new JLabel("Symbol ");
+        symbolLabel.setPreferredSize(new Dimension(100, 35));
+        symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField symbolField = new JTextField();
+        symbolField.setPreferredSize(new Dimension(150, 25));
+        // add the label and field to the panel 
+        symbolPanel.add(symbolLabel);
+        symbolPanel.add(symbolField);
+        leftPanel.add(symbolPanel);
+
+    
+        /* ~~ panel for the keywords input field ~~ */
+        JPanel keywordsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel keywordsLabel = new JLabel("<html>Name<br> keywords <html>");
+        keywordsLabel.setPreferredSize(new Dimension(100, 35)); 
+        keywordsLabel.setFont(new Font(keywordsLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField keywordsField = new JTextField();
+        keywordsField.setPreferredSize(new Dimension(250, 25)); 
+        // add the label and field to the panel
+        keywordsPanel.add(keywordsLabel);
+        keywordsPanel.add(keywordsField);
+        leftPanel.add(keywordsPanel);
+    
+        /* ~~ panel for the low price input field ~~ */
+        JPanel lowPricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel lowPriceLabel = new JLabel("Low price "); // lower range of the price
+        lowPriceLabel.setPreferredSize(new Dimension(100, 35)); 
+        lowPriceLabel.setFont(new Font(lowPriceLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField lowPriceField = new JTextField(); 
+        lowPriceField.setPreferredSize(new Dimension(125, 25)); 
+        // add the label and field to the panel
+        lowPricePanel.add(lowPriceLabel);
+        lowPricePanel.add(lowPriceField);
+        leftPanel.add(lowPricePanel);
+    
+        /* ~~ panel for the high price input field ~~ */
+        JPanel highPricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel highPriceLabel = new JLabel("High price "); // upper range of the price
+        highPriceLabel.setPreferredSize(new Dimension(100, 35)); 
+        highPriceLabel.setFont(new Font(highPriceLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField highPriceField = new JTextField();
+        highPriceField.setPreferredSize(new Dimension(125, 25)); 
+        // add the label and field to the panel
+        highPricePanel.add(highPriceField);
+        leftPanel.add(highPricePanel);
+    
+        
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space between the input fields and the message area below
+    
+        // right side of the panel for the buttons (reset and search)
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); 
+    
+        /* ~~ panel for the reset button ~~ */
+        JButton resetButton = new JButton("Reset");
+        resetButton.setPreferredSize(new Dimension(120, 50));
+        resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // create a wrapper panel to center the button
+        resetWrapper.add(resetButton);
+    
+        /* ~~ panel for the search button ~~ */
+        JButton searchButton = new JButton("Search");
+        searchButton.setPreferredSize(new Dimension(120, 50));
+        searchButton.setFont(new Font(searchButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel searchWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        searchWrapper.add(searchButton); 
+    
+        // add the buttons to the panel
+        rightPanel.add(Box.createVerticalGlue()); 
+        rightPanel.add(resetWrapper);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
+        rightPanel.add(searchWrapper);
+    
+        // action listenr for reset button to clear the fields
+        resetButton.addActionListener(e -> {
+            symbolField.setText(""); // clear the symbol field
+            keywordsField.setText(""); // clear the keywords field
+            lowPriceField.setText(""); // clear the low price field
+            highPriceField.setText(""); // clear the high price field
+            searchMessageArea.setText(""); // clear the message area
+        });
+    
+        searchButton.addActionListener(e -> handleSearchAction(symbolField, keywordsField, lowPriceField, highPriceField)); // action listener for the search button to handle the search action
+    
+        // add the left and right panels to a split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        splitPane.setDividerLocation(400);
+        splitPane.setResizeWeight(0.7); 
+        splitPane.setContinuousLayout(true);
+        splitPane.setBorder(null); 
+    
+        searchPanel.add(splitPane, BorderLayout.CENTER);
+        searchPanel.add(createSearchResultsPanel(), BorderLayout.SOUTH);
+    
+        return searchPanel;
+    }
+    
+    // method to create the search results panel
+    private JPanel createSearchResultsPanel() {
+
+        JPanel resultsPanel = new JPanel(new BorderLayout());
+    
+        // label for the search results
+        JLabel resultsLabel = new JLabel("Search results");
+        resultsLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); 
+        resultsLabel.setFont(new Font(resultsLabel.getFont().getName(), Font.PLAIN, 16));
+    
+        // text area for the search results
+        searchMessageArea = new JTextArea(8, 20); 
+        searchMessageArea.setEditable(false); // not editable by the user
+        searchMessageArea.setLineWrap(true);  // wrap the text so that it fits in the text area
+        searchMessageArea.setWrapStyleWord(true);  // wrap the text at words instead of letters, so that words are not split in half
+    
+        // scroll pane for the text area
+        JScrollPane resultsScrollPane = new JScrollPane(searchMessageArea);
+        resultsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  // always show the vertical scroll bar
+        resultsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);  // always show the horizontal scroll bar
+    
+        // add the label and scroll pane to the panel
+        resultsPanel.add(resultsLabel, BorderLayout.NORTH);
+        resultsPanel.add(resultsScrollPane, BorderLayout.CENTER);
+    
+        return resultsPanel;
+    }
+
+    // method to handle the search action when the search button is clicked using the searchForInvestment method from my Portfolio class
+    private void handleSearchAction(JTextField symbolField, JTextField keywordsField, JTextField lowPriceField, JTextField highPriceField) {
+        
+        // variables to hold the inputs from the fields
+        String symbolInput;
+        String keywordsInput;
+        String priceRangeInput;
+        String lowPrice;
+        String highPrice;
+
+        searchMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
+    
+        symbolInput = symbolField.getText().trim(); // get the symbol from the field
+        keywordsInput = keywordsField.getText().trim(); // get the keywords from the field
+        priceRangeInput = ""; // initialize the price range input to an empty string
+    
+        lowPrice = lowPriceField.getText().trim(); // get the low price from the field
+        highPrice = highPriceField.getText().trim(); // get the high price from the field
+    
+        // if the low price or high price is not empty, set the price range input to the low price and high price separated by a hyphen
+        if (!lowPrice.isEmpty() || !highPrice.isEmpty()) {
+            priceRangeInput = lowPrice + "-" + highPrice;
+        }
+        
+        // try catch block to handle the search action and display the search results
+        try {
+            String results; // variable to hold the search results
+            results = portfolio.searchForInvestment(symbolInput, keywordsInput, priceRangeInput); // search for the investment based on the inputs
+    
+            // if the results are empty, display a message saying no investments match the search
+            if (results.isEmpty()) {
+                searchMessageArea.append("Sorry, no investments match your search.\n");
+            } 
+            // otherwise display the search results
+            else {
+                searchMessageArea.append(results);
+            }
+        } 
+        // catch any exceptions that could happen
+        catch (Exception ex) {
+            searchMessageArea.append("Oops, was unable to process your search. Please double check your inputs or try again!\n");
+        }
+    }
+    
+    
+    
     
