@@ -974,6 +974,7 @@ public class ePortfolioGUI extends JFrame {
         JTextField highPriceField = new JTextField();
         highPriceField.setPreferredSize(new Dimension(125, 25)); 
         // add the label and field to the panel
+        highPricePanel.add(highPriceLabel);
         highPricePanel.add(highPriceField);
         leftPanel.add(highPricePanel);
     
@@ -1101,6 +1102,39 @@ public class ePortfolioGUI extends JFrame {
         }
     }
     
-    
+    // method to create the menu bar for the GUI holding all of the commands
+    private JMenuBar createMenuBar() {
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu options = new JMenu("Commands"); // commands menu
+        options.setFont(new Font(options.getFont().getName(), Font.PLAIN, 20));
+        options.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // add 20px padding on the left and 10px padding below
+
+        // menu items for the commands
+        JMenuItem buyItem = new JMenuItem("Buy");
+        JMenuItem sellItem = new JMenuItem("Sell");
+        JMenuItem updateItem = new JMenuItem("Update");
+        JMenuItem gainItem = new JMenuItem("Get Gain");
+        JMenuItem searchItem = new JMenuItem("Search Investments");
+
+        // action listeners for the menu items to switch between the panels
+        buyItem.addActionListener(e -> cardLayout.show(panel, "BUY"));
+        sellItem.addActionListener(e -> cardLayout.show(panel, "SELL"));
+        updateItem.addActionListener(e -> cardLayout.show(panel, "UPDATE"));
+        gainItem.addActionListener(e -> cardLayout.show(panel, "GAIN"));
+        searchItem.addActionListener(e -> cardLayout.show(panel, "SEARCH"));
+
+        // add the menu items to the options menu
+        options.add(buyItem);
+        options.add(sellItem);
+        options.add(updateItem);
+        options.add(gainItem);
+        options.add(searchItem);
+        menuBar.add(options);
+
+        return menuBar;
+    }
+}
+
     
     
