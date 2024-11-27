@@ -1168,16 +1168,18 @@ public class ePortfolioGUI extends JFrame {
         JMenuItem updateItem = new JMenuItem("Update");
         JMenuItem gainItem = new JMenuItem("Get Gain");
         JMenuItem searchItem = new JMenuItem("Search Investments");
+        JMenuItem quitItem = new JMenuItem("Quit");
+
 
         // action listeners for the menu items to switch between the panels
         buyItem.addActionListener(e -> cardLayout.show(panel, "BUY"));
         sellItem.addActionListener(e -> cardLayout.show(panel, "SELL"));
         updateItem.addActionListener(e -> cardLayout.show(panel, "UPDATE"));
         searchItem.addActionListener(e -> cardLayout.show(panel, "SEARCH"));
-
+        quitItem.addActionListener(e -> System.exit(0)); // close the program
+        // the gain action listener is a bit different as it needs to update the gain panel with the latest portfolio data when the menu item is clicked instead of a button
         gainItem.addActionListener(e -> {
             cardLayout.show(panel, "GAIN");
-            System.out.println("Updating Gain Panel...");
             updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the latest portfolio data
         });        
 
@@ -1187,7 +1189,9 @@ public class ePortfolioGUI extends JFrame {
         options.add(updateItem);
         options.add(gainItem);
         options.add(searchItem);
+        options.add(quitItem);
         menuBar.add(options);
+
 
         return menuBar;
     }
