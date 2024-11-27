@@ -575,3 +575,241 @@ public class ePortfolioGUI extends JFrame {
         }
     }
     
+    // method to create the update investment panel
+    private JPanel createUpdatePanel() {
+
+        JPanel updatePanel = new JPanel(new BorderLayout());
+        updatePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+    
+        // left side of the panel for the input fields (symbol, name, and price)
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+    
+        /* ~~ title panel for updating investments ~~ */
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel titleLabel = new JLabel("Updating investments");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        // add the label to the panel
+        titlePanel.add(titleLabel); 
+        leftPanel.add(titlePanel);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
+    
+        /* ~~ panel for the symbol input field ~~ */
+        JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel symbolLabel = new JLabel("Symbol ");
+        symbolLabel.setPreferredSize(new Dimension(100, 35)); 
+        symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField symbolField = new JTextField();
+        symbolField.setPreferredSize(new Dimension(150, 25)); 
+        symbolField.setEditable(false);
+        // add the label and field to the panel
+        symbolPanel.add(symbolLabel);
+        symbolPanel.add(symbolField);
+        leftPanel.add(symbolPanel);
+    
+        /* ~~ panel for the name input field ~~ */    
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel nameLabel = new JLabel("Name ");
+        nameLabel.setPreferredSize(new Dimension(100, 35)); 
+        nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField nameField = new JTextField();
+        nameField.setPreferredSize(new Dimension(250, 25)); 
+        nameField.setEditable(false); 
+        // add the label and field to the panel
+        namePanel.add(nameLabel);
+        namePanel.add(nameField);
+        leftPanel.add(namePanel);
+    
+        /* ~~ panel for the price input field ~~ */
+        JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel priceLabel = new JLabel("Price ");
+        priceLabel.setPreferredSize(new Dimension(100, 35)); 
+        priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
+        JTextField priceField = new JTextField();
+        priceField.setPreferredSize(new Dimension(125, 25)); 
+        // add the label and field to the panel
+        pricePanel.add(priceLabel);
+        pricePanel.add(priceField);
+        leftPanel.add(pricePanel);
+    
+        
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space between the input fields and the message area below
+    
+        // right side of the panel for the buttons (prev, next, and save)
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); // Add padding
+    
+        /* ~~ panel for the prev button ~~ */
+        JButton prevButton = new JButton("Prev");
+        prevButton.setPreferredSize(new Dimension(120, 50)); 
+        prevButton.setFont(new Font(prevButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel prevWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        prevWrapper.add(prevButton);
+    
+        /* ~~ panel for the next button ~~ */
+        JButton nextButton = new JButton("Next");
+        nextButton.setPreferredSize(new Dimension(120, 50));
+        nextButton.setFont(new Font(nextButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel nextWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        nextWrapper.add(nextButton); 
+    
+        /* ~~ panel for the save button ~~ */
+        JButton saveButton = new JButton("Save");
+        saveButton.setPreferredSize(new Dimension(120, 50)); 
+        saveButton.setFont(new Font(saveButton.getFont().getName(), Font.PLAIN, 16));
+        JPanel saveWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        saveWrapper.add(saveButton); 
+    
+        // add the buttons to the panel
+        rightPanel.add(Box.createVerticalGlue()); 
+        rightPanel.add(prevWrapper);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
+        rightPanel.add(nextWrapper);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        rightPanel.add(saveWrapper);
+    
+        
+        final int[] index = {0}; // variable to track the current investment index
+
+        // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
+        if (portfolio.getInvestments().isEmpty()) {
+            updateMessageArea.setText("No investments to display.");
+            symbolField.setText("");
+            nameField.setText("");
+            priceField.setText("");
+        } 
+        // otherwise display the first investment in the portfolio
+        else {
+            Investment current = portfolio.getInvestments().get(index[0]); // get the first investment
+            symbolField.setText(current.getSymbol()); // set the symbol field to the symbol of the investment
+            nameField.setText(current.getName()); // set the name field to the name of the investment
+            priceField.setText(String.valueOf(current.getPrice())); // set the price field to the price of the investment
+        }
+
+        // action listeners for the buttons to handle the actions when they are clicked
+        prevButton.addActionListener(e -> {
+            // if the index is greater than 0, decrement the index and display the previous investment
+            if (index[0] > 0) {
+                index[0]--;
+                // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
+                if (portfolio.getInvestments().isEmpty()) {
+                    updateMessageArea.setText("No investments to display.");
+                    symbolField.setText("");
+                    nameField.setText("");
+                    priceField.setText("");
+                } 
+                // otherwise display the previous investment
+                else {
+                    Investment previous = portfolio.getInvestments().get(index[0]); // get the previous investment
+                    symbolField.setText(previous.getSymbol()); // set the symbol field to the symbol of the investment
+                    nameField.setText(previous.getName()); // set the name field to the name of the investment
+                    priceField.setText(String.valueOf(previous.getPrice())); // set the price field to the price of the investment
+                }
+            }
+        });
+
+        // action listener for the next button to display the next investment
+        nextButton.addActionListener(e -> {
+            // if the index is less than the size of the portfolio1, increment the index and display the next investment
+            if (index[0] < portfolio.getInvestments().size() - 1) {
+                index[0]++; // increment the index
+                // if the portfolio is empty, display a message saying there are no investments to display in the message area and clear the fields
+                if (portfolio.getInvestments().isEmpty()) {
+                    updateMessageArea.setText("No investments to display.");
+                    symbolField.setText("");
+                    nameField.setText("");
+                    priceField.setText("");
+                } 
+                // otherwise display the next investment
+                else {
+                    Investment next = portfolio.getInvestments().get(index[0]);
+                    symbolField.setText(next.getSymbol());
+                    nameField.setText(next.getName());
+                    priceField.setText(String.valueOf(next.getPrice()));
+                }
+            }
+        });
+
+        // action listener for the save button to save the updated price of the investment
+        saveButton.addActionListener(e -> {
+            // try catch block to handle the if the user enters an invalid value for the price
+            try {
+                double newPrice = Double.parseDouble(priceField.getText().trim()); // get the new price from the field
+                portfolio.getInvestments().get(index[0]).setPrice(newPrice); // set the new price of the investment
+                updateMessageArea.setText("Price updated successfully."); // display the success message
+            } 
+            catch (NumberFormatException ex) {
+                updateMessageArea.setText("Sorry, please enter a valid value for price.");
+            }
+        });
+
+        // add the left and right panels to a split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        splitPane.setDividerLocation(400); 
+        splitPane.setResizeWeight(0.7); 
+        splitPane.setContinuousLayout(true);
+        splitPane.setBorder(null);
+
+        updatePanel.add(splitPane, BorderLayout.CENTER);
+        updatePanel.add(createUpdateMessagePanel(), BorderLayout.SOUTH);
+
+        return updatePanel;
+    }
+    
+    // method to create the message panel specific to the update panel
+    private JPanel createUpdateMessagePanel() {
+        JPanel messagePanel = new JPanel(new BorderLayout());
+    
+        // label for the message area
+        JLabel messageLabel = new JLabel("Messages ");
+        messageLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); 
+        messageLabel.setFont(new Font(messageLabel.getFont().getName(), Font.PLAIN, 16));
+    
+        // text area for the messages
+        updateMessageArea = new JTextArea(8, 20);
+        updateMessageArea.setEditable(false);
+        updateMessageArea.setLineWrap(true); 
+        updateMessageArea.setWrapStyleWord(true); 
+    
+        // scroll pane for the text area
+        JScrollPane messageScrollPane = new JScrollPane(updateMessageArea);
+        messageScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+        messageScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    
+        // add the label and scroll pane to the panel
+        messagePanel.add(messageLabel, BorderLayout.NORTH);
+        messagePanel.add(messageScrollPane, BorderLayout.CENTER);
+    
+        return messagePanel;
+    }
+    
+    // method to create the gain panel
+    private void handleUpdateAction(JTextField priceField, int investmentIndex) {
+
+        updateMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
+    
+        // try catch block to handle the if the user enters an invalid value for the price
+        try {
+            double newPrice = Double.parseDouble(priceField.getText().trim()); // get the new price from the field
+            // if the new price is less than or equal to 0, display an error message
+            if (newPrice <= 0) {
+                updateMessageArea.append("Oops, price must be greater than zero!\n");
+                return;
+            }
+            portfolio.getInvestments().get(investmentIndex).setPrice(newPrice); // set the new price of the investment
+            
+            updateMessageArea.append("Price updated successfully to $" + String.format("%.2f", newPrice) + ".\n"); // display the success message with the new price
+        }
+        // catch the exception if the user enters an invalid value for the price
+        catch (NumberFormatException ex) {
+            updateMessageArea.append("Sorry, please enter a valid price.\n");
+        } 
+        // catch the exception if the user enters an index that is out of range
+        catch (IndexOutOfBoundsException ex) {
+            updateMessageArea.append("Oops, unable to update investment - index out of range!\n");
+        }
+    }
+
+    
