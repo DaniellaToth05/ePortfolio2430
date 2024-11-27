@@ -15,7 +15,9 @@ import ePortfolio.Portfolio;
 import javax.swing.*;
 import java.awt.*;
 
-// GUI class for ePortfolio
+/**
+ * class to represent the GUI for the ePortfolio program
+ */
 public class ePortfolioGUI extends JFrame {
     public static final int WIDTH = 700; // width of the frame
     public static final int HEIGHT = 500; // height of the frame
@@ -40,13 +42,20 @@ public class ePortfolioGUI extends JFrame {
     private JTextArea gainMessageArea;
     private JTextArea searchMessageArea;
 
-    // constructor for the GUI
+    
+    /**
+     * constructor for the ePortfolio GUI
+     */
     public ePortfolioGUI() {
         portfolio = new Portfolio(); 
         initializeGUI();
     }
  
-    // main method to run the GUI
+    
+    /**
+     * main method to run the GUI
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
 
         ePortfolioGUI frame = new ePortfolioGUI(); // create the frame
@@ -54,8 +63,10 @@ public class ePortfolioGUI extends JFrame {
         frame.setVisible(true); // set the frame to be visible
 
     }
- 
-    // method to initialize the GUI components
+
+    /**
+     * method to initialize the GUI components
+     */
     private void initializeGUI() {
 
         setTitle("ePortfolio"); 
@@ -87,7 +98,11 @@ public class ePortfolioGUI extends JFrame {
         setJMenuBar(createMenuBar());  // add the menu bar to the frame (commands)
     }
     
-    // method to make the main welcome/instructions panel
+    
+    /**
+     * method to make the main welcome/instructions panel
+     * @return the panel for the main screen
+     */
     private JPanel createMainPanel() {
 
         JPanel mainPanel = new JPanel();
@@ -111,7 +126,10 @@ public class ePortfolioGUI extends JFrame {
         return mainPanel;
     }
     
-    // method to create the buy investment panel
+    /**
+     * method to create the buy investment panel
+     * @return the panel for buying investments
+     */
     private JPanel createBuyPanel() {
 
         JPanel buyPanel = new JPanel(new BorderLayout());
@@ -237,8 +255,11 @@ public class ePortfolioGUI extends JFrame {
     
         return buyPanel;
      }
-
-    // method to create the message panel specific to the buy panel
+    
+    /**
+     * method to create the message panel specific to the buy panel
+     * @return the panel for the buy messages
+     */
     private JPanel createBuyMessagePanel() {
 
         JPanel messagePanel = new JPanel(new BorderLayout());
@@ -264,7 +285,9 @@ public class ePortfolioGUI extends JFrame {
         return messagePanel;
     }
     
-    // method to reset the input fields and message areas when the reset button is clicked
+    /**
+     * method to reset the input fields and message areas when the reset button is clicked
+     */
     private void resetFields() {
 
         // reset the input fields
@@ -291,7 +314,9 @@ public class ePortfolioGUI extends JFrame {
         } 
     }
  
-    // method to handle the buy action when the buy button is clicked (using the buyInvestment method from my Portfolio class) 
+    /**
+     * method to handle the buy action when the buy button is clicked (using the buyInvestment method from my Portfolio class)
+     */
     private void handleBuyAction() {
         try {
             // get the input values from the fields like the type of investment, symbol, name, quantity, and price
@@ -387,7 +412,10 @@ public class ePortfolioGUI extends JFrame {
         }
     }
 
-    // method to create the sell investment panel
+    /**
+     * method to create the sell investment panel
+     * @return the panel for selling investments
+     */
     private JPanel createSellPanel() {
 
         JPanel sellPanel = new JPanel(new BorderLayout());
@@ -496,7 +524,11 @@ public class ePortfolioGUI extends JFrame {
         return sellPanel;
     }
     
-    // method to create the message panel specific to the sell panel
+    
+    /**
+     * method to create the message panel specific to the sell panel
+     * @return the panel for the sell messages
+     */
     private JPanel createSellMessagePanel() {
 
         JPanel messagePanel = new JPanel(new BorderLayout());
@@ -522,7 +554,12 @@ public class ePortfolioGUI extends JFrame {
         return messagePanel;
     }
     
-    // method to handle the sell action when the sell button is clicked using the sellInvestment method from my Portfolio class
+    /**
+     * method to handle the sell action when the sell button is clicked using the sellInvestment method from my Portfolio class
+     * @param symbolField input field for the symbol
+     * @param quantityField input field for the quantity
+     * @param priceField input field for the price
+     */
     private void handleSellAction(JTextField symbolField, JTextField quantityField, JTextField priceField) {
         
         sellMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
@@ -575,7 +612,10 @@ public class ePortfolioGUI extends JFrame {
         }
     }
     
-    // method to create the update investment panel
+    /**
+     * method to create the update investment panel
+     * @return the panel for updating investments
+     */
     private JPanel createUpdatePanel() {
 
         JPanel updatePanel = new JPanel(new BorderLayout());
@@ -758,7 +798,10 @@ public class ePortfolioGUI extends JFrame {
         return updatePanel;
     }
     
-    // method to create the message panel specific to the update panel
+    /**
+     * method to create the message panel specific to the update panel
+     * @return messagePanel the message panel
+     */
     private JPanel createUpdateMessagePanel() {
         JPanel messagePanel = new JPanel(new BorderLayout());
     
@@ -784,8 +827,12 @@ public class ePortfolioGUI extends JFrame {
     
         return messagePanel;
     }
-    
-    // method to create the gain panel
+
+    /**
+     * method to handle the update action when the save button is clicked
+     * @param priceField input field for the price
+     * @param investmentIndex index of the investment in the portfolio
+     */
     private void handleUpdateAction(JTextField priceField, int investmentIndex) {
 
         updateMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
@@ -812,7 +859,10 @@ public class ePortfolioGUI extends JFrame {
         }
     }
 
-    // method to create the gain panel
+    /**
+     * method to create the gain panel
+     * @return gainPanel the gain panel
+     */
     private JPanel createGainPanel() {
 
         // panel for the gain panel
@@ -910,7 +960,10 @@ public class ePortfolioGUI extends JFrame {
         return gainPanel;
     }
     
-    // method to create the search panel
+    /**
+     * method to create the search panel
+     * @return searchPanel the search panel
+     */
     private JPanel createSearchPanel() {
 
         JPanel searchPanel = new JPanel(new BorderLayout());
@@ -1030,7 +1083,10 @@ public class ePortfolioGUI extends JFrame {
         return searchPanel;
     }
     
-    // method to create the search results panel
+    /**
+     * method to create the search results panel
+     * @return the search results panel
+     */
     private JPanel createSearchResultsPanel() {
 
         JPanel resultsPanel = new JPanel(new BorderLayout());
@@ -1058,7 +1114,14 @@ public class ePortfolioGUI extends JFrame {
         return resultsPanel;
     }
 
-    // method to handle the search action when the search button is clicked using the searchForInvestment method from my Portfolio class
+    
+    /**
+     * method to handle the search action when the search button is clicked using the searchForInvestment method from my Portfolio class
+     * @param symbolField symbol field
+     * @param keywordsField keywords field
+     * @param lowPriceField low price field
+     * @param highPriceField high price field
+     */
     private void handleSearchAction(JTextField symbolField, JTextField keywordsField, JTextField lowPriceField, JTextField highPriceField) {
         
         // variables to hold the inputs from the fields
@@ -1102,7 +1165,11 @@ public class ePortfolioGUI extends JFrame {
         }
     }
     
-    // method to create the menu bar for the GUI holding all of the commands
+    
+    /**
+     * method to create the menu bar for the GUI holding all of the commands
+     * @return the menu bar with the commands
+     */
     private JMenuBar createMenuBar() {
 
         JMenuBar menuBar = new JMenuBar();
