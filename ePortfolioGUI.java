@@ -28,6 +28,10 @@ public class ePortfolioGUI extends JFrame {
     private Portfolio portfolio; // portfolio object
 
     private int index = 0; // index for the search panel and updating the investment fields
+    private JButton prevButton;
+    private JButton nextButton;
+    private JButton saveButton;
+
 
     // text fields for user input
     private JTextField symbolField;
@@ -58,6 +62,12 @@ public class ePortfolioGUI extends JFrame {
      */
     public ePortfolioGUI() {
         portfolio = new Portfolio(); 
+        symbolField = new JTextField();
+        nameField = new JTextField();
+        priceField = new JTextField();
+        quantityField = new JTextField();
+        totalGainField = new JTextField();
+        individualGainsArea = new JTextArea();
         initializeGUI();
     }
  
@@ -145,6 +155,11 @@ public class ePortfolioGUI extends JFrame {
         JPanel buyPanel = new JPanel(new BorderLayout());
         buyPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
     
+        JTextField buySymbolField = new JTextField();
+        JTextField buyNameField = new JTextField();
+        JTextField buyPriceField = new JTextField();
+        JTextField buyQuantityField = new JTextField();
+
         // left side of the panel for the input fields (symbol, name, quantity, and price)
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -173,49 +188,45 @@ public class ePortfolioGUI extends JFrame {
         /* ~~ panel for the symbol input field ~~ */
         JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel symbolLabel = new JLabel("Symbol ");
-        symbolLabel.setPreferredSize(new Dimension(100, 35)); 
+        symbolLabel.setPreferredSize(new Dimension(100, 35));
         symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
-        symbolField = new JTextField();
-        symbolField.setPreferredSize(new Dimension(150, 25)); 
+        buySymbolField.setPreferredSize(new Dimension(150, 25));
         // add all the components to the panel
         symbolPanel.add(symbolLabel);
-        symbolPanel.add(symbolField);
+        symbolPanel.add(buySymbolField);
         leftPanel.add(symbolPanel);
-    
+
         /* ~~ panel for the name input field ~~ */
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel nameLabel = new JLabel("Name ");
-        nameLabel.setPreferredSize(new Dimension(100, 35)); 
+        nameLabel.setPreferredSize(new Dimension(100, 35));
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 16));
-        nameField = new JTextField();
-        nameField.setPreferredSize(new Dimension(250, 25)); 
+        buyNameField.setPreferredSize(new Dimension(250, 25));
         // add all the components to the panel
         namePanel.add(nameLabel);
-        namePanel.add(nameField);
+        namePanel.add(buyNameField);
         leftPanel.add(namePanel);
     
         /* ~~ panel for the quantity input field ~~ */
         JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel quantityLabel = new JLabel("Quantity ");
-        quantityLabel.setPreferredSize(new Dimension(100, 35)); 
+        quantityLabel.setPreferredSize(new Dimension(100, 35));
         quantityLabel.setFont(new Font(quantityLabel.getFont().getName(), Font.PLAIN, 16));
-        quantityField = new JTextField();
-        quantityField.setPreferredSize(new Dimension(125, 25)); 
+        buyQuantityField.setPreferredSize(new Dimension(125, 25));
         // add all the components to the panel
         quantityPanel.add(quantityLabel);
-        quantityPanel.add(quantityField);
+        quantityPanel.add(buyQuantityField);
         leftPanel.add(quantityPanel);
     
         /* ~~ panel for the price input field ~~ */
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel priceLabel = new JLabel("Price ");
-        priceLabel.setPreferredSize(new Dimension(100, 35)); 
+        priceLabel.setPreferredSize(new Dimension(100, 35));
         priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
-        priceField = new JTextField();
-        priceField.setPreferredSize(new Dimension(125, 25)); 
+        buyPriceField.setPreferredSize(new Dimension(125, 25));
         // add all the components to the panel
         pricePanel.add(priceLabel);
-        pricePanel.add(priceField);
+        pricePanel.add(buyPriceField);
         leftPanel.add(pricePanel);
     
         
@@ -259,6 +270,7 @@ public class ePortfolioGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleBuyAction();
+                updateUpdatePanel();         
             }
         });
     
@@ -343,16 +355,15 @@ public class ePortfolioGUI extends JFrame {
             String type = (String) typeComboBox.getSelectedItem();
             String symbol = symbolField.getText().trim();
             String name = nameField.getText().trim();
-
-            
+    
             buyMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
-
+    
             // if the user leaves the symbol field empty, display an error message
             if (symbol.isEmpty()) {
                 buyMessageArea.append("Sorry, investment symbol cannot be empty.\n");
                 return;
             }
-
+    
             boolean inPortfolio = false; // variable to hold true or false depending on if the symbol is already in the portfolio
             // loop through the investments in the portfolio to check if the symbol already exists
             for (int i = 0; i < portfolio.getInvestments().size(); i++) {
@@ -367,13 +378,13 @@ public class ePortfolioGUI extends JFrame {
                 buyMessageArea.append("Sorry, this symbol already exists in your portfolio! Please choose a different symbol.\n");
                 return;
             }
-
+    
             // if the user leaves the name field empty, display an error message
             if (name.isEmpty()) {
                 buyMessageArea.append("Sorry, investment name cannot be empty.\n");
                 return;
             }
-
+    
             int quantity; // variable to hold the quantity of the investment
             // a try catch block to handle the case where the user enters a non-integer value for the quantity
             try {
@@ -383,12 +394,11 @@ public class ePortfolioGUI extends JFrame {
                     buyMessageArea.append("Oops, you can't purchase " + quantity + " units!\n");
                     return;
                 }
-            } 
-            catch (NumberFormatException ex) { // catch the exception if the user enters a non-integer value
+            } catch (NumberFormatException ex) { // catch the exception if the user enters a non-integer value
                 buyMessageArea.append("Sorry, please enter a valid quantity.\n");
                 return;
             }
-
+    
             double price; // variable to hold the price of the investment
             // same try catch block as above to handle the case where the user enters a non-double value for the price
             try {
@@ -398,18 +408,16 @@ public class ePortfolioGUI extends JFrame {
                     buyMessageArea.append("Oops, you can't purchase units for $" + price + "!\n");
                     return;
                 }
-            } 
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 buyMessageArea.append("Sorry, please enter a valid price.\n");
                 return;
             }
-
-            
+    
             Investment investment = null; // variable to hold the investment object
             // if the type is stock, create a stock object
-            if (type.equalsIgnoreCase("Stock")) { 
+            if (type.equalsIgnoreCase("Stock")) {
                 investment = new Stock(symbol, name, quantity, price, false);
-            } 
+            }
             // if the type is mutual fund, create a mutual fund object
             else if (type.equalsIgnoreCase("Mutual Fund")) {
                 investment = new MutualFund(symbol, name, quantity, price, false);
@@ -419,15 +427,19 @@ public class ePortfolioGUI extends JFrame {
                 buyMessageArea.append("Invalid choice, please try again.\n");
                 return;
             }
-
+    
             investment.setBookValue(price); // set the book value of the investment
-
+    
             portfolio.buyInvestment(investment); // buy the investment and add it to the portfolio
-
+            System.out.println("Portfolio size after buying: " + portfolio.getInvestments().size());
             buyMessageArea.append("Investment added successfully!\n"); // display the success message when the investment is added
-
-        } 
-        catch (Exception ex) { // catch any other exceptions that could happen
+    
+            index = portfolio.getInvestments().size() - 1; // set the index to the last investment in the portfolio
+            updateUpdatePanel(); // Ensure the update panel is refreshed
+    
+            cardLayout.show(panel, "UPDATE"); // Switch to the UPDATE panel after buying
+    
+        } catch (Exception ex) { // catch any other exceptions that could happen
             buyMessageArea.append("Oops, an unexpected error occurred: " + ex.getMessage() + "\n");
         }
     }
@@ -460,7 +472,7 @@ public class ePortfolioGUI extends JFrame {
         JLabel symbolLabel = new JLabel("Symbol ");
         symbolLabel.setPreferredSize(new Dimension(100, 35));
         symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
-        JTextField symbolField = new JTextField();
+        //JTextField symbolField = new JTextField();
         symbolField.setPreferredSize(new Dimension(150, 25)); 
         // add the label and field to the panel
         symbolPanel.add(symbolLabel);
@@ -484,7 +496,7 @@ public class ePortfolioGUI extends JFrame {
         JLabel priceLabel = new JLabel("Price ");
         priceLabel.setPreferredSize(new Dimension(100, 35)); 
         priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
-        JTextField priceField = new JTextField();
+        //JTextField priceField = new JTextField();
         priceField.setPreferredSize(new Dimension(125, 25)); 
         // add the label and field to the panel
         pricePanel.add(priceLabel);
@@ -635,11 +647,57 @@ public class ePortfolioGUI extends JFrame {
         // if the payment is greater than or equal to 0, display the success message with the payment amount
         if (payment >= 0) {
             sellMessageArea.append("Investment sold successfully. Payment: $" + String.format("%.2f", payment) + "\n");
+            
+            if (portfolio.getInvestments().isEmpty()) {
+                index = 0; // reset index if the portfolio is empty
+            } 
+            else if (index >= portfolio.getInvestments().size()) {
+                index = portfolio.getInvestments().size() - 1; // adjust index if it goes out of bounds
+            }
+            updateUpdatePanel();
+        
         } 
         // otherwise display an error message
         else {
             sellMessageArea.append("Oops, investment wasn't found or an invalid quantity was entered.\n");
         }
+    }
+    /**
+     * method to update the update panel with the current investment details (after an investment is bought or sold)
+     */
+    private void updateUpdatePanel() {
+
+        System.out.println("Portfolio size in updateUpdatePanel: " + portfolio.getInvestments().size());
+        for (Investment investment : portfolio.getInvestments()) {
+            System.out.println("Investment in portfolio: " + investment);
+        }
+
+
+
+        if (portfolio.getInvestments().isEmpty()) {
+            System.out.println("Portfolio is empty in updateUpdatePanel.");
+            symbolField.setText("");
+            nameField.setText("");
+            priceField.setText("");
+            updateMessageArea.setText("No investments to display.");
+            prevButton.setEnabled(false);
+            nextButton.setEnabled(false);
+        } else {
+            System.out.println("Portfolio is not empty. Size: " + portfolio.getInvestments().size());
+            Investment current = portfolio.getInvestments().get(index);
+            System.out.println("Displaying investment: " + current);
+            symbolField.setText(current.getSymbol());
+            nameField.setText(current.getName());
+            priceField.setText(String.valueOf(current.getPrice()));
+            updateMessageArea.setText(""); // clear messages
+            prevButton.setEnabled(index > 0);
+            nextButton.setEnabled(index < portfolio.getInvestments().size() - 1);
+        }
+        
+
+        // Revalidate and repaint the panel to ensure proper UI refresh
+        panel.revalidate();
+        panel.repaint();
     }
     
 
@@ -669,7 +727,7 @@ public class ePortfolioGUI extends JFrame {
         JLabel symbolLabel = new JLabel("Symbol ");
         symbolLabel.setPreferredSize(new Dimension(100, 35));
         symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
-        JTextField symbolField = new JTextField();
+        //symbolField = new JTextField();
         symbolField.setPreferredSize(new Dimension(150, 25));
         symbolField.setEditable(false);
         symbolPanel.add(symbolLabel); // add the label and field to the panel
@@ -681,7 +739,7 @@ public class ePortfolioGUI extends JFrame {
         JLabel nameLabel = new JLabel("Name ");
         nameLabel.setPreferredSize(new Dimension(100, 35));
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 16));
-        JTextField nameField = new JTextField();
+        //nameField = new JTextField();
         nameField.setPreferredSize(new Dimension(250, 25));
         nameField.setEditable(false);
         namePanel.add(nameLabel); // add the label and field to the panel
@@ -693,7 +751,7 @@ public class ePortfolioGUI extends JFrame {
         JLabel priceLabel = new JLabel("Price ");
         priceLabel.setPreferredSize(new Dimension(100, 35));
         priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
-        JTextField priceField = new JTextField();
+        //priceField = new JTextField();
         priceField.setPreferredSize(new Dimension(125, 25));
         pricePanel.add(priceLabel); // add the label and field to the panel
         pricePanel.add(priceField);
@@ -707,21 +765,21 @@ public class ePortfolioGUI extends JFrame {
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
         /* ~~ panel for the prev button ~~ */
-        JButton prevButton = new JButton("Prev");
+        prevButton = new JButton("Prev");
         prevButton.setPreferredSize(new Dimension(120, 50));
         prevButton.setFont(new Font(prevButton.getFont().getName(), Font.PLAIN, 16));
         JPanel prevWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         prevWrapper.add(prevButton);
 
         /* ~~ panel for the next button ~~ */
-        JButton nextButton = new JButton("Next");
+        nextButton = new JButton("Next");
         nextButton.setPreferredSize(new Dimension(120, 50));
         nextButton.setFont(new Font(nextButton.getFont().getName(), Font.PLAIN, 16));
         JPanel nextWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         nextWrapper.add(nextButton);
 
         /* ~~ panel for the save button ~~ */
-        JButton saveButton = new JButton("Save");
+        saveButton = new JButton("Save");
         saveButton.setPreferredSize(new Dimension(120, 50));
         saveButton.setFont(new Font(saveButton.getFont().getName(), Font.PLAIN, 16));
         JPanel saveWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -734,7 +792,7 @@ public class ePortfolioGUI extends JFrame {
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         rightPanel.add(saveWrapper);
 
-        // If portfolio is empty, display no investments message and disable buttons
+        // if portfolio is empty, display no investments message and disable buttons
         if (portfolio.getInvestments().isEmpty()) {
             updateMessageArea.setText("No investments to display.");
             symbolField.setText("");
@@ -742,7 +800,8 @@ public class ePortfolioGUI extends JFrame {
             priceField.setText("");
             prevButton.setEnabled(false);
             nextButton.setEnabled(false);
-        } else {
+        } 
+        else {
             Investment current = portfolio.getInvestments().get(index);
             symbolField.setText(current.getSymbol());
             nameField.setText(current.getName());
@@ -751,6 +810,7 @@ public class ePortfolioGUI extends JFrame {
             prevButton.setEnabled(false); // disable prev for the first investment
             nextButton.setEnabled(portfolio.getInvestments().size() > 1); // enable next if more than one investment
         }
+
 
         // action listener for the prev button
         prevButton.addActionListener(new ActionListener() {
@@ -805,6 +865,7 @@ public class ePortfolioGUI extends JFrame {
 
         return updatePanel;
     }
+
 
 
 
@@ -1209,13 +1270,27 @@ public class ePortfolioGUI extends JFrame {
                 cardLayout.show(panel, "SELL");
             }
         });
-        // action listener for the update item to switch to the update panel
+        /**
+         * action listener for the update item to switch to the update panel
+         */
         updateItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel, "UPDATE");
+                if (portfolio.getInvestments().isEmpty()) {
+                    updateMessageArea.setText("No investments to display.");
+                    symbolField.setText("");
+                    nameField.setText("");
+                    priceField.setText("");
+                    prevButton.setEnabled(false);
+                    nextButton.setEnabled(false);
+                } else {
+                    index = 0; // Start with the first investment
+                    updateUpdatePanel(); // Refresh the update panel with the current investment
+                }
+                cardLayout.show(panel, "UPDATE"); // Switch to the UPDATE panel
             }
         });
+        
         // action listener for the search item to switch to the search panel
         searchItem.addActionListener(new ActionListener() {
             @Override
