@@ -1285,6 +1285,7 @@ public class ePortfolioGUI extends JFrame {
                 else {
                     index = 0; // start with the first investment
                     updateUpdatePanel(); // refresh the update panel with the current investment
+                    cardLayout.show(panel, "UPDATE");
                 }
                 
             }
