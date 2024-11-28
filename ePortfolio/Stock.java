@@ -65,7 +65,8 @@ public class Stock extends Investment {
      * @param shareQuantity number of shares being bought
      * @param sharePrice current price per unit
      */
-    public void buyStock(int shareQuantity, double sharePrice){
+    @Override
+    public void buy(int shareQuantity, double sharePrice){
         setQuantity(getQuantity() + shareQuantity); // increase amount of shares owned
         setPrice(sharePrice); // update book value
     }

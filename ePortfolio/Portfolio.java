@@ -47,81 +47,35 @@ public class Portfolio {
      * 
      * @param investment the investment thats added/updated
      */
-    public void buyInvestment( Investment investment){
+    public void buyInvestment(Investment investment) {
+
+            // loop through the investment list to check if the investment already exists
+            for (int i = 0; i < investments.size(); i++) {
+                Investment investCompare = investments.get(i); // get the investment at index i
         
-        // loop through the investment list to check if the investment already exists
-        for (int i = 0; i < investments.size(); i++){
-            Investment investCompare = investments.get(i); // get the investment at index i
-
-            // if the investment matches, then update the number of units and price 
-            if (investCompare.getSymbol().toLowerCase().equals(investment.getSymbol())){
-                // if both investments are stocks, then buy the stock
-                if(investCompare instanceof Stock && investment instanceof Stock){
-                    // cast the investments to stocks
-                    Stock stock = (Stock) investCompare; 
-                    Stock stockInvestment = (Stock) investment;
-                    // buy the stock
-                    stock.buyStock(stockInvestment.getQuantity(), stockInvestment.getPrice());
+                // if the investment matches, update the number of units and price
+                if (investCompare.getSymbol().equalsIgnoreCase(investment.getSymbol())) {
+                    investCompare.buy(investment.getQuantity(), investment.getPrice()); // polymorphic call to buy method
+                    return; // return if the investment is found and updated
                 }
-                // if both investments are mutual funds, then buy the mutual fund
-                else if(investCompare instanceof MutualFund && investment instanceof MutualFund){
-                    // cast the investments to mutual funds
-                    MutualFund fund = (MutualFund) investCompare;
-                    MutualFund fundInvestment = (MutualFund) investment;
-                    // buy the mutual fund
-                    fund.buyFundUnits(fundInvestment.getQuantity(), fundInvestment.getPrice());
-                }
-                // // update the keyword map
-                // String[] keywords = investCompare.getName().split(" "); // split the stock name into keywords
-                // for(int j = 0; j < keywords.length; j++){ // loop through the keywords
-                //     String keyword = keywords[j].toLowerCase(); // get the keyword
-                //     if(this.mapKeyword.containsKey(keyword)){ // if the keyword is in the map
-                //         this.mapKeyword.get(keyword).add(investment); // add the stock to the keyword list
-                //     }
-                //     else{ // otherwise.. 
-                //         ArrayList<Investment> keywordList = new ArrayList<>(); // create a new keyword list
-                //         keywordList.add(investment); // add the stock to the list
-                //         this.mapKeyword.put(keyword, keywordList); // add the keyword to the map
-                //     }
-                // }
-                return; // return if the stock is found
             }
-        }
-        // add the stock to portfolio
-        investments.add(investment);
-
-        // add the iinvestment to the keyword map
-        String[] keywords = investment.getName().split(" ");
-        // loop through the keywords and add the investment to the map
-        for (int i = 0; i < keywords.length; i++){
-            String keyword = keywords[i].trim().toLowerCase(); // get the keyword
-
-            if(keyword.isEmpty()){
-                continue;
-            }
-
-            if (this.mapKeyword.containsKey(keyword)){ // if the keyword is in the map
-                ArrayList<Investment> existingKeyWordList = this.mapKeyword.get(keyword); // get the list of investments
-
-                boolean investmentExists = false; // check if the investment already exists in the list
-                for(int j = 0; j < existingKeyWordList.size(); j++){
-                    Investment existingInvestment = existingKeyWordList.get(j); // get the investment at index j
-                    if(existingInvestment.getSymbol().equalsIgnoreCase(investment.getSymbol())){ // if the investment already exists
-                        investmentExists = true; // set the flag to true
-                        break; // break the loop
+        
+            // add the investment to the portfolio if it doesn't already exist
+            investments.add(investment);
+        
+            // add the investment to the keyword map
+            String[] keywords = investment.getName().split(" "); // split the investment name into keywords
+            for (int i = 0; i < keywords.length; i++) {
+                String keyword = keywords[i].trim().toLowerCase(); // get the keyword
+        
+                if (!keyword.isEmpty()) { // skip empty keywords
+                    if (!mapKeyword.containsKey(keyword)) {
+                        mapKeyword.put(keyword, new ArrayList<>()); // create a new list if the keyword doesn't exist
                     }
+                    mapKeyword.get(keyword).add(investment); // add the investment to the keyword list
                 }
-                if(!investmentExists){ // if the investment doesn't exist
-                    existingKeyWordList.add(investment); // add the stock to the keyword list
-                }
-            }
-            else {
-                ArrayList<Investment> keywordList = new ArrayList<>(); // create a new keyword list
-                keywordList.add(investment); // add the stock to the list
-                this.mapKeyword.put(keyword, keywordList); // add the keyword to the map
             }
         }
-    }
 
 
     /**

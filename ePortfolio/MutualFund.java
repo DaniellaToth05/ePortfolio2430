@@ -63,7 +63,8 @@ public class MutualFund extends Investment{
      * @param unitQuantity number of units being bought
      * @param unitPrice current price per unit
      */
-    public void buyFundUnits(int unitQuantity, double unitPrice){
+    @Override
+    public void buy(int unitQuantity, double unitPrice){
         setQuantity(getQuantity() + unitQuantity); // increase amount of units owned    
         setPrice(unitPrice); // update book value
     }
