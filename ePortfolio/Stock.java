@@ -76,7 +76,8 @@ public class Stock extends Investment {
      * @param sharePrice current price per share
      * @return the profit from the sale
      */
-    public double sellStock(int shareQuantity, double sharePrice){
+    @Override
+    public double sell(int shareQuantity, double sharePrice){
         double sellProfit = (shareQuantity * sharePrice) - commissionFee; // calculate payment
         int oldQuantity = getQuantity();
         setQuantity(oldQuantity - shareQuantity); // decrease amount of shares owned

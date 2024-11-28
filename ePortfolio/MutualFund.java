@@ -75,7 +75,8 @@ public class MutualFund extends Investment{
      * @param unitPrice current price per unit
      * @return the profit from the sale
      */
-    public double sellFundUnits(int unitQuantity, double unitPrice){
+    @Override
+    public double sell(int unitQuantity, double unitPrice){
         double sellProfit = (unitQuantity * unitPrice) - redemptionFee; // calculate payment
         int oldQuantity = getQuantity();
         setQuantity(oldQuantity - unitQuantity); // decrease amount of units owned

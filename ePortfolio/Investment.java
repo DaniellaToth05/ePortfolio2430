@@ -32,6 +32,15 @@ public abstract class Investment {
     }
 
     /**
+     * Abstract method to sell units of an investment.
+     * 
+     * @param quantity the number of units to sell
+     * @param price the price per unit
+     * @return the payment received from selling the investment
+     */
+    public abstract double sell(int quantity, double price);
+    
+    /**
      * method to get the symbol of the investment
      * @return the symbol of the investment
      */

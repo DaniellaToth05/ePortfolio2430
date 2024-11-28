@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class Portfolio {
     private ArrayList<Investment> investments; // list of investments in the portfolio
     private HashMap<String, ArrayList<Investment>> mapKeyword; // map of keywords to investments
-    private double keepTotalGain; // total gain from selling investments
+    private double keepTotalGain = 0.0; // total gain from selling investments
 
     /**
      * method to create an empty portfolio
@@ -132,105 +132,47 @@ public class Portfolio {
      * @param price the price of each unit
      * @return the payment received from selling the investment, or -1 if the investment couldn't be found in the list
      */
-    public double sellInvestment(String symbol, int quantity, double price){
+    public double sellInvestment(String symbol, int quantity, double price) {
         // loop through stocks list to find the one user wants to sell
-        for (int i = 0; i < investments.size(); i++){
+        for (int i = 0; i < investments.size(); i++) {
             Investment investment = investments.get(i); // get the stock at index i
-            
+    
             // if the symbol matches, sell the number of shares
-            if (investment.getSymbol().equalsIgnoreCase(symbol)){
-                double payment = 0.0;
-                // if the investment is a stock, sell the stock
-                if (investment instanceof Stock){
-                    Stock stock = (Stock) investment; // cast the investment to a stock
-                    payment = stock.sellStock(quantity, price); // sell stock if symbol matches
-
-                    // remove it from the portfolio if the number of shares is zero
-                    if(stock.getQuantity() == 0){
-                        keepTotalGain = keepTotalGain + stock.calculateGain(); // add the gain to the total gain
-                        for(int j = 0; j < investments.size(); j++){
-                            if(investments.get(j).equals(stock)){
-                                investments.remove(j); // remove the mutual fund from the list
-                                break;
-                            }
+            if (investment.getSymbol().equalsIgnoreCase(symbol)) {
+                double payment = investment.sell(quantity, price); // polymorphic call to sell method
+    
+                // remove it from the portfolio if the number of shares is zero
+                if (investment.getQuantity() == 0) {
+                    keepTotalGain += investment.calculateGain(); // add the realized gain
+                    investments.remove(i); // remove the investment from the portfolio
+    
+                    // remove the investment from the keyword map
+                    String[] keywords = investment.getName().split(" "); // split the investment name into keywords
+                    for (String keyword : keywords) {
+                        keyword = keyword.trim().toLowerCase(); // normalize the keyword
+    
+                        // skip empty keywords
+                        if (keyword.isEmpty()) {
+                            continue;
                         }
-                        String[] keywords = stock.getName().split(" "); 
-
-                        for(int k = 0; k < keywords.length; k++){
-                            String keyword = keywords[k].trim().toLowerCase(); // get the keyword
-
-                            // if the keyword is empty, skip it
-                            if(keyword.isEmpty()){
-                                continue;
-                            }
-
-                            // if the keyword is in the map, remove the stock from the keyword list
-                            if(mapKeyword.containsKey(keyword)){
-                                ArrayList<Investment> keywordList = mapKeyword.get(keyword); // get the list of investments
-
-                                // to remove the stock from the keyword list
-                                for(int l = 0; l < keywordList.size(); l++){
-                                    if(keywordList.get(l).equals(stock)){ // if the stock is found
-                                        keywordList.remove(l); // remove the stock
-                                        break;
-                                    }
-                                }
-                                // remove the keyword from the map if the list is empty
-                                if(keywordList.isEmpty()){
-                                    mapKeyword.remove(keyword);
-                                }
+    
+                        // if the keyword is in the map, remove the investment from the keyword list
+                        if (mapKeyword.containsKey(keyword)) {
+                            ArrayList<Investment> keywordList = mapKeyword.get(keyword); // get the list of investments
+                            keywordList.remove(investment); // remove the investment from the list
+    
+                            // remove the keyword from the map if the list is empty
+                            if (keywordList.isEmpty()) {
+                                mapKeyword.remove(keyword);
                             }
                         }
                     }
-                    return payment; // return the payment
                 }
-                // if the investment is a mutual fund, sell the mutual fund
-                else if (investment instanceof MutualFund){
-                    MutualFund fund = (MutualFund) investment; // cast the investment to a mutual fund
-                    payment = fund.sellFundUnits(quantity, price); // sell fund if symbol matches
-
-                    // remove it from portfolio if number of units is zero
-                    if(fund.getQuantity() == 0){
-                        keepTotalGain = keepTotalGain + fund.calculateGain(); // add the gain to the total gain
-                        for(int j = 0; j < investments.size(); j++){
-                            if(investments.get(j).equals(fund)){
-                                investments.remove(j); // remove the mutual fund from the list
-                                break;
-                            }
-                        }
-                        // remove the mutual fund from the keyword map
-                        String[] keywords = fund.getName().split(" ");
-                        for(int k = 0; k < keywords.length; k++){
-                            String keyword = keywords[k].trim().toLowerCase(); // get the keyword
-
-                            // if the keyword is empty, skip it
-                            if(keyword.isEmpty()){
-                                continue;
-                            }
-
-                            // if the keyword is in the map, remove the stock from the keyword list
-                            if(mapKeyword.containsKey(keyword)){
-                                ArrayList<Investment> keywordList = mapKeyword.get(keyword); // get the list of investments
-
-                                // to remove the stock from the keyword list
-                                for(int l = 0; l < keywordList.size(); l++){
-                                    if(keywordList.get(l).equals(fund)){ // if the stock is found
-                                        keywordList.remove(l); // remove the stock
-                                        break;
-                                    }
-                                }
-                                // remove the keyword from the map if the list is empty
-                                if(keywordList.isEmpty()){
-                                    mapKeyword.remove(keyword);
-                                }
-                            }
-                        }
-                    }
-                    return payment;
-                }
+    
+                return payment; // return the payment for the sold investment
             }
         }
-        return -1; // stock not found
+        return -1; // return -1 if the investment was not found
     }
     
 
