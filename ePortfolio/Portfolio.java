@@ -87,35 +87,30 @@ public class Portfolio {
      * @return the payment received from selling the investment, or -1 if the investment couldn't be found in the list
      */
     public double sellInvestment(String symbol, int quantity, double price) {
-        // loop through stocks list to find the one user wants to sell
+        // loop through the investments list to find the one user wants to sell
         for (int i = 0; i < investments.size(); i++) {
-            Investment investment = investments.get(i); // get the stock at index i
+            Investment investment = investments.get(i); // get the investment at index i
     
-            // if the symbol matches, sell the number of shares
+            // if the symbol matches, sell the specified number of units
             if (investment.getSymbol().equalsIgnoreCase(symbol)) {
                 double payment = investment.sell(quantity, price); // polymorphic call to sell method
     
-                // remove it from the portfolio if the number of shares is zero
+                // if all units are sold, remove the investment and update total realized gain
                 if (investment.getQuantity() == 0) {
-                    keepTotalGain += investment.calculateGain(); // add the realized gain
+                    keepTotalGain += investment.calculateGain(); // add the realized gain to total gain
                     investments.remove(i); // remove the investment from the portfolio
     
-                    // remove the investment from the keyword map
+                    // update the keyword map to remove the sold investment
                     String[] keywords = investment.getName().split(" "); // split the investment name into keywords
                     for (String keyword : keywords) {
                         keyword = keyword.trim().toLowerCase(); // normalize the keyword
     
-                        // skip empty keywords
-                        if (keyword.isEmpty()) {
-                            continue;
-                        }
-    
-                        // if the keyword is in the map, remove the investment from the keyword list
+                        // if the keyword exists, remove the investment from its list
                         if (mapKeyword.containsKey(keyword)) {
-                            ArrayList<Investment> keywordList = mapKeyword.get(keyword); // get the list of investments
+                            ArrayList<Investment> keywordList = mapKeyword.get(keyword); // get the keyword's investment list
                             keywordList.remove(investment); // remove the investment from the list
     
-                            // remove the keyword from the map if the list is empty
+                            // if the list is now empty, remove the keyword from the map
                             if (keywordList.isEmpty()) {
                                 mapKeyword.remove(keyword);
                             }
@@ -159,28 +154,27 @@ public class Portfolio {
      * @param scan input for the new investment prices
      */
     public void updateInvestmentPrices(Scanner scan) {
-
-        // check if there are stocks in the list
-        if(investments != null && !investments.isEmpty()){
+        // check if there are investments in the portfolio
+        if (investments != null && !investments.isEmpty()) {
             System.out.println("Updating Investment Prices: ");
             for (int i = 0; i < investments.size(); i++) {
-                Investment investment = investments.get(i);
+                Investment investment = investments.get(i); // get the investment
                 System.out.print("Enter new price for " + investment.getSymbol().toUpperCase() + ": $");
-                double newPrice = scan.nextDouble(); // get new price from user
-                scan.nextLine();
-                if (newPrice < 0){
-                    System.out.println("\nOops, shares/units cannot be a negative price.");
-                }
+                double newPrice = scan.nextDouble(); // get the new price from the user
+                scan.nextLine(); // consume the newline character
+
+                if (newPrice < 0) {
+                    System.out.println("\nOops, price cannot be negative.");
+                } 
                 else {
-                    investment.setPrice(newPrice); // update the stock price
-                    System.out.println("\nPrice updated for " + investment.getSymbol().toUpperCase());
+                    investment.setPrice(newPrice); // update the price
+                    System.out.println("Price updated for " + investment.getSymbol().toUpperCase());
                 }
             }
-        }
+        } 
         else {
-            System.out.println("There are currently no stocks in your portfolio to update.");
+            System.out.println("There are currently no investments in your portfolio to update.");
         }
-        
     }
 
     
