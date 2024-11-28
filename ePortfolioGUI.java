@@ -108,13 +108,13 @@ public class ePortfolioGUI extends JFrame {
         //gainMessageArea = new JTextArea(8, 20);
         searchMessageArea = new JTextArea(8, 20);
 
-        // Buy panel-specific fields
+        // fields specific to the buy panel
         buySymbolField = new JTextField(15);
         buyNameField = new JTextField(15);
         buyQuantityField = new JTextField(10);
         buyPriceField = new JTextField(10);
 
-        // Sell panel-specific fields
+        // fields specific to the sell panel
         sellSymbolField = new JTextField(15);
         sellQuantityField = new JTextField(10);
         sellPriceField = new JTextField(10);
@@ -242,12 +242,12 @@ public class ePortfolioGUI extends JFrame {
 
         leftPanel.add(Box.createRigidArea(new Dimension(0, 16)));
 
-        // Right side of the panel for the buttons (reset and buy)
+        // right side of the panel for the buttons (reset and buy)
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
-        /* ~~ Panel for the Reset Button ~~ */
+        /* ~~ panel for the reset button ~~ */
         JButton resetButton = new JButton("Reset");
         resetButton.setPreferredSize(new Dimension(120, 50));
         resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));

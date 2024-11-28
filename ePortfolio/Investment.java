@@ -30,7 +30,6 @@ public abstract class Investment {
             setBookValue(price);
         }
     }
-
     /**
      * abstract method to sell units of an investment.
      * 
