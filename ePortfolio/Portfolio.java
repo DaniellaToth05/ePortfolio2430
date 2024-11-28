@@ -21,6 +21,7 @@ public class Portfolio {
         this.investments = new ArrayList<>();
         this.mapKeyword = new HashMap<>();
         this.keepTotalGain = 0.0;
+        System.out.println("Portfolio object created");
         
     }
 

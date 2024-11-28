@@ -33,13 +33,21 @@ public class ePortfolioGUI extends JFrame {
     private JButton saveButton;
 
 
-    // text fields for user input
-    private JTextField symbolField;
-    private JTextField nameField;
-    private JTextField quantityField;
-    private JTextField priceField; 
-    private JTextField totalGainField;
-    private JTextArea individualGainsArea;
+    // buy panel-specific fields
+    private JTextField buySymbolField;
+    private JTextField buyNameField;
+    private JTextField buyQuantityField;
+    private JTextField buyPriceField;
+    
+    // sell panel-specific fields
+    private JTextField sellSymbolField;
+    private JTextField sellQuantityField;
+    private JTextField sellPriceField;
+
+    // update panel-specific fields
+    private JTextField updateSymbolField;
+    private JTextField updateNameField;
+    private JTextField updatePriceField;
     
 
     private JComboBox<String> typeComboBox; // combo box for investment type
@@ -50,8 +58,11 @@ public class ePortfolioGUI extends JFrame {
     private JTextArea buyMessageArea;
     private JTextArea sellMessageArea;
     private JTextArea updateMessageArea;
-    private JTextArea gainMessageArea;
+    //private JTextArea gainMessageArea;
     private JTextArea searchMessageArea;
+
+    private JTextField totalGainField; // Declare totalGainField
+    private JTextArea individualGainsArea;
 
     
 
@@ -62,12 +73,6 @@ public class ePortfolioGUI extends JFrame {
      */
     public ePortfolioGUI() {
         portfolio = new Portfolio(); 
-        symbolField = new JTextField();
-        nameField = new JTextField();
-        priceField = new JTextField();
-        quantityField = new JTextField();
-        totalGainField = new JTextField();
-        individualGainsArea = new JTextArea();
         initializeGUI();
     }
  
@@ -102,8 +107,21 @@ public class ePortfolioGUI extends JFrame {
         buyMessageArea = new JTextArea(8, 20);
         sellMessageArea = new JTextArea(8, 20);
         updateMessageArea = new JTextArea(8, 20); 
-        gainMessageArea = new JTextArea(8, 20);
+        //gainMessageArea = new JTextArea(8, 20);
         searchMessageArea = new JTextArea(8, 20);
+
+        // Buy panel-specific fields
+        buySymbolField = new JTextField(15);
+        buyNameField = new JTextField(15);
+        buyQuantityField = new JTextField(10);
+        buyPriceField = new JTextField(10);
+
+        // Sell panel-specific fields
+        sellSymbolField = new JTextField(15);
+        sellQuantityField = new JTextField(10);
+        sellPriceField = new JTextField(10);
+
+
     
         // add each of the panels to the card layout so that they can be switched between
         panel.add(createMainPanel(), "MAIN");
@@ -147,146 +165,142 @@ public class ePortfolioGUI extends JFrame {
     }
     
     /**
-     * method to create the buy investment panel
+     * Method to create the buy investment panel
      * @return the panel for buying investments
      */
     private JPanel createBuyPanel() {
-
         JPanel buyPanel = new JPanel(new BorderLayout());
         buyPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
-    
-        JTextField buySymbolField = new JTextField();
-        JTextField buyNameField = new JTextField();
-        JTextField buyPriceField = new JTextField();
-        JTextField buyQuantityField = new JTextField();
+
+        buySymbolField = new JTextField(15);
+        buyNameField = new JTextField(15);
+        buyQuantityField = new JTextField(10);
+        buyPriceField = new JTextField(10);
+
 
         // left side of the panel for the input fields (symbol, name, quantity, and price)
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-    
-        /* ~~ panel for the title (buying an investment) */
+
+        /* Title Panel */
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel titleLabel = new JLabel("Buying an investment");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // make it bold and larger text
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titlePanel.add(titleLabel);
         leftPanel.add(titlePanel);
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // add space between the title and the input fields
-    
-        /* ~~ panel for the type combo box (stock or mutual fund) ~~ */
-        JPanel typePanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // flowlayout to align the label and combo box
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        /* Type ComboBox Panel */
+        JPanel typePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel typeLabel = new JLabel("Type ");
-        typeLabel.setPreferredSize(new Dimension(100, 35));  // set the size of the label so that it is aligned with the other labels
-        typeLabel.setFont(new Font(typeLabel.getFont().getName(), Font.PLAIN, 16)); 
-        typeComboBox = new JComboBox<>(new String[]{"Stock", "Mutual Fund"}); // options for the combo box
-        typeComboBox.setPreferredSize(new Dimension(200, 25)); // set the size of the combo box to somewhat match the sample image
-        // add all the components to the panel
+        typeLabel.setPreferredSize(new Dimension(100, 35));
+        typeLabel.setFont(new Font(typeLabel.getFont().getName(), Font.PLAIN, 16));
+        typeComboBox = new JComboBox<>(new String[]{"Stock", "Mutual Fund"});
+        typeComboBox.setPreferredSize(new Dimension(200, 25));
         typePanel.add(typeLabel);
         typePanel.add(typeComboBox);
         leftPanel.add(typePanel);
-    
-        /* ~~ panel for the symbol input field ~~ */
+
+        /* Symbol Field Panel */
         JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel symbolLabel = new JLabel("Symbol ");
         symbolLabel.setPreferredSize(new Dimension(100, 35));
         symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
         buySymbolField.setPreferredSize(new Dimension(150, 25));
-        // add all the components to the panel
         symbolPanel.add(symbolLabel);
         symbolPanel.add(buySymbolField);
         leftPanel.add(symbolPanel);
 
-        /* ~~ panel for the name input field ~~ */
+        /* Name Field Panel */
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel nameLabel = new JLabel("Name ");
         nameLabel.setPreferredSize(new Dimension(100, 35));
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 16));
         buyNameField.setPreferredSize(new Dimension(250, 25));
-        // add all the components to the panel
         namePanel.add(nameLabel);
         namePanel.add(buyNameField);
         leftPanel.add(namePanel);
-    
-        /* ~~ panel for the quantity input field ~~ */
+
+        /* Quantity Field Panel */
         JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel quantityLabel = new JLabel("Quantity ");
         quantityLabel.setPreferredSize(new Dimension(100, 35));
         quantityLabel.setFont(new Font(quantityLabel.getFont().getName(), Font.PLAIN, 16));
         buyQuantityField.setPreferredSize(new Dimension(125, 25));
-        // add all the components to the panel
         quantityPanel.add(quantityLabel);
         quantityPanel.add(buyQuantityField);
         leftPanel.add(quantityPanel);
-    
-        /* ~~ panel for the price input field ~~ */
+
+        /* Price Field Panel */
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel priceLabel = new JLabel("Price ");
         priceLabel.setPreferredSize(new Dimension(100, 35));
         priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
         buyPriceField.setPreferredSize(new Dimension(125, 25));
-        // add all the components to the panel
         pricePanel.add(priceLabel);
         pricePanel.add(buyPriceField);
         leftPanel.add(pricePanel);
-    
-        
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space between the input fields and the message area below
-    
-        // right side of the panel for the buttons (reset and buy)
+
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 16)));
+
+        // Right side of the panel for the buttons (reset and buy)
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); // add padding
-    
-        /* ~~ panel for the reset button ~~ */
-        JButton resetButton = new JButton("Reset"); 
-        resetButton.setPreferredSize(new Dimension(120, 50)); 
-        resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
-        JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // this is a wrapper panel to center the button in the panel (flowlayout)
-        resetWrapper.add(resetButton);
-    
-        /* ~~ panel for the buy button ~~ */
-        JButton buyButton = new JButton("Buy");
-        buyButton.setPreferredSize(new Dimension(120, 50)); 
-        buyButton.setFont(new Font(buyButton.getFont().getName(), Font.PLAIN, 16));
-        JPanel buyWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // same wrapper panel as above
-        buyWrapper.add(buyButton); 
-    
-        
-        rightPanel.add(Box.createVerticalGlue());  // add space at the top of the panel
-        // add the buttons to the panel
-        rightPanel.add(resetWrapper);
-        rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
-        rightPanel.add(buyWrapper);
-    
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
-        // add action listeners to the buttons to handle the actions when they are clicked
+        /* ~~ Panel for the Reset Button ~~ */
+        JButton resetButton = new JButton("Reset");
+        resetButton.setPreferredSize(new Dimension(120, 50));
+        resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetFields();
+                buySymbolField.setText("");
+                buyNameField.setText("");
+                buyQuantityField.setText("");
+                buyPriceField.setText("");
+                buyMessageArea.setText("");
             }
         });
+        JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Center-align reset button
+        resetWrapper.add(resetButton);
+
+        /* ~~ Panel for the Buy Button ~~ */
+        JButton buyButton = new JButton("Buy");
+        buyButton.setPreferredSize(new Dimension(120, 50));
+        buyButton.setFont(new Font(buyButton.getFont().getName(), Font.PLAIN, 16));
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleBuyAction();
-                updateUpdatePanel();         
+                handleBuyAction(typeComboBox, buySymbolField, buyNameField, buyQuantityField, buyPriceField);
             }
         });
-    
-        // add the left and right panels to a split pane
+        JPanel buyWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Center-align buy button
+        buyWrapper.add(buyButton);
+
+        // Add buttons to the right panel
+        rightPanel.add(Box.createVerticalGlue());
+        rightPanel.add(resetWrapper);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        rightPanel.add(buyWrapper);
+        
+
+        // Add panels to a split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
-        splitPane.setDividerLocation(400); // the divider should be about 3/4 of the way to the right
-        splitPane.setResizeWeight(0.7);  
-        splitPane.setContinuousLayout(true); 
-        splitPane.setBorder(null); // remove the border of the split pane to make it look nicer
-    
-        // add the split pane and the message panel to the buy panel
+        splitPane.setDividerLocation(400);
+        splitPane.setResizeWeight(0.7);
+        splitPane.setContinuousLayout(true);
+        splitPane.setBorder(null);
+
         buyPanel.add(splitPane, BorderLayout.CENTER);
         buyPanel.add(createBuyMessagePanel(), BorderLayout.SOUTH);
-    
+
         return buyPanel;
-     }
+    }
+
+
+
     
     /**
      * method to create the message panel specific to the buy panel
@@ -317,54 +331,36 @@ public class ePortfolioGUI extends JFrame {
         return messagePanel;
     }
     
-    /**
-     * method to reset the input fields and message areas when the reset button is clicked
-     */
-    private void resetFields() {
-
-        // reset the input fields
-        symbolField.setText("");
-        nameField.setText("");
-        quantityField.setText("");
-        priceField.setText("");
-
-        // reset the message areas if they are not null
-        if (buyMessageArea != null){
-            buyMessageArea.setText(""); // for buy panel
-        } 
-        if (sellMessageArea != null){
-            sellMessageArea.setText(""); // for sell panel
-        }
-        if (updateMessageArea != null){
-            updateMessageArea.setText(""); // for update panel
-        } 
-        if (gainMessageArea != null){
-            gainMessageArea.setText(""); // for gain panel
-        }
-        if (searchMessageArea != null){
-            searchMessageArea.setText(""); // for search panel
-        } 
-    }
+    
  
     /**
      * method to handle the buy action when the buy button is clicked (using the buyInvestment method from my Portfolio class)
+     * @param typeComboBox combo box for selecting the investment type
+     * @param buySymbolField text field for entering the investment symbol
+     * @param buyNameField text field for entering the investment name
+     * @param buyQuantityField text field for entering the quantity of the investment
+     * @param buyPriceField text field for entering the price of the investment
      */
-    private void handleBuyAction() {
+    private void handleBuyAction(JComboBox<String> typeComboBox, JTextField buySymbolField, JTextField buyNameField, JTextField buyQuantityField, JTextField buyPriceField) {
         try {
+            System.out.println("handleBuyAction triggered"); // Debugging
+    
             // get the input values from the fields like the type of investment, symbol, name, quantity, and price
             String type = (String) typeComboBox.getSelectedItem();
-            String symbol = symbolField.getText().trim();
-            String name = nameField.getText().trim();
+            String symbol = buySymbolField.getText().trim();
+            String name = buyNameField.getText().trim();
     
             buyMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
     
             // if the user leaves the symbol field empty, display an error message
             if (symbol.isEmpty()) {
+                System.out.println("Symbol is empty");
                 buyMessageArea.append("Sorry, investment symbol cannot be empty.\n");
                 return;
             }
     
             boolean inPortfolio = false; // variable to hold true or false depending on if the symbol is already in the portfolio
+    
             // loop through the investments in the portfolio to check if the symbol already exists
             for (int i = 0; i < portfolio.getInvestments().size(); i++) {
                 Investment investment = portfolio.getInvestments().get(i);
@@ -373,14 +369,17 @@ public class ePortfolioGUI extends JFrame {
                     break; // exit the loop early as the symbol is found
                 }
             }
+    
             // if the symbol already exists in the portfolio, display an error message
             if (inPortfolio) {
+                System.out.println("Symbol already exists in the portfolio");
                 buyMessageArea.append("Sorry, this symbol already exists in your portfolio! Please choose a different symbol.\n");
                 return;
             }
     
             // if the user leaves the name field empty, display an error message
             if (name.isEmpty()) {
+                System.out.println("Name is empty");
                 buyMessageArea.append("Sorry, investment name cannot be empty.\n");
                 return;
             }
@@ -388,13 +387,15 @@ public class ePortfolioGUI extends JFrame {
             int quantity; // variable to hold the quantity of the investment
             // a try catch block to handle the case where the user enters a non-integer value for the quantity
             try {
-                quantity = Integer.valueOf(quantityField.getText().trim()); // get the quantity from the field
+                quantity = Integer.valueOf(buyQuantityField.getText().trim()); // get the quantity from the field
                 // if the quantity is less than or equal to 0, display an error message
                 if (quantity <= 0) {
+                    System.out.println("Invalid quantity: " + quantity);
                     buyMessageArea.append("Oops, you can't purchase " + quantity + " units!\n");
                     return;
                 }
             } catch (NumberFormatException ex) { // catch the exception if the user enters a non-integer value
+                System.out.println("Quantity is not a valid number");
                 buyMessageArea.append("Sorry, please enter a valid quantity.\n");
                 return;
             }
@@ -402,13 +403,15 @@ public class ePortfolioGUI extends JFrame {
             double price; // variable to hold the price of the investment
             // same try catch block as above to handle the case where the user enters a non-double value for the price
             try {
-                price = Double.parseDouble(priceField.getText().trim());
+                price = Double.valueOf(buyPriceField.getText().trim());
                 // if the price is less than 0, display an error message
                 if (price < 0) {
+                    System.out.println("Invalid price: " + price);
                     buyMessageArea.append("Oops, you can't purchase units for $" + price + "!\n");
                     return;
                 }
             } catch (NumberFormatException ex) {
+                System.out.println("Price is not a valid number");
                 buyMessageArea.append("Sorry, please enter a valid price.\n");
                 return;
             }
@@ -424,25 +427,42 @@ public class ePortfolioGUI extends JFrame {
             }
             // otherwise its an invalid choice, so display an error message 
             else {
+                System.out.println("Invalid investment type");
                 buyMessageArea.append("Invalid choice, please try again.\n");
                 return;
             }
     
             investment.setBookValue(price); // set the book value of the investment
+            System.out.println("Book value set for investment");
     
             portfolio.buyInvestment(investment); // buy the investment and add it to the portfolio
             System.out.println("Portfolio size after buying: " + portfolio.getInvestments().size());
+            updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the new investment
+
+
+            // Traditional for loop to determine the last index
+            index = portfolio.getInvestments().size() - 1;
+            for (int i = 0; i < portfolio.getInvestments().size(); i++) {
+                if (i == portfolio.getInvestments().size() - 1) {
+                    index = i;
+                }
+            }
+    
+            System.out.println("Index after buying: " + index);
             buyMessageArea.append("Investment added successfully!\n"); // display the success message when the investment is added
     
-            index = portfolio.getInvestments().size() - 1; // set the index to the last investment in the portfolio
             updateUpdatePanel(); // Ensure the update panel is refreshed
     
-            cardLayout.show(panel, "UPDATE"); // Switch to the UPDATE panel after buying
+      
     
         } catch (Exception ex) { // catch any other exceptions that could happen
-            buyMessageArea.append("Oops, an unexpected error occurred: " + ex.getMessage() + "\n");
+            System.out.println("An unexpected exception occurred: " + ex.getMessage());
+            ex.printStackTrace();
+            buyMessageArea.append("An unexpected error occurred. Please try again.\n");
         }
     }
+
+    
 
     /**
      * method to create the sell investment panel
@@ -452,117 +472,109 @@ public class ePortfolioGUI extends JFrame {
 
         JPanel sellPanel = new JPanel(new BorderLayout());
         sellPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
-    
-        // left side of the panel for the input fields (symbol, quantity, and price)
+        
+        sellSymbolField = new JTextField(15);
+        sellQuantityField = new JTextField(10);
+        sellPriceField = new JTextField(10);
+
+        // Left side of the panel for the input fields (symbol, quantity, and price)
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
-    
+        
         /* ~~ title panel for selling an investment ~~ */
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel titleLabel = new JLabel("Selling an investment");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // make it bold and larger text
-        // add the label to the panel
         titlePanel.add(titleLabel); 
         leftPanel.add(titlePanel);
         leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // add space between the title and the input fields
-    
+        
         /* ~~ panel for the symbol input field ~~ */
         JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel symbolLabel = new JLabel("Symbol ");
         symbolLabel.setPreferredSize(new Dimension(100, 35));
         symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
-        //JTextField symbolField = new JTextField();
-        symbolField.setPreferredSize(new Dimension(150, 25)); 
+        sellSymbolField.setPreferredSize(new Dimension(150, 25)); 
         // add the label and field to the panel
         symbolPanel.add(symbolLabel);
-        symbolPanel.add(symbolField);
+        symbolPanel.add(sellSymbolField);
         leftPanel.add(symbolPanel);
-    
+        
         /* ~~ panel for the quantity input field ~~ */
         JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel quantityLabel = new JLabel("Quantity ");
         quantityLabel.setPreferredSize(new Dimension(100, 35)); 
         quantityLabel.setFont(new Font(quantityLabel.getFont().getName(), Font.PLAIN, 16));
-        JTextField quantityField = new JTextField();
-        quantityField.setPreferredSize(new Dimension(125, 25));
+        sellQuantityField.setPreferredSize(new Dimension(125, 25));
         // add the label and field to the panel
         quantityPanel.add(quantityLabel);
-        quantityPanel.add(quantityField);
+        quantityPanel.add(sellQuantityField);
         leftPanel.add(quantityPanel);
-    
+        
         /* ~~ panel for the price input field ~~ */
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel priceLabel = new JLabel("Price ");
         priceLabel.setPreferredSize(new Dimension(100, 35)); 
         priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
-        //JTextField priceField = new JTextField();
-        priceField.setPreferredSize(new Dimension(125, 25)); 
+        sellPriceField.setPreferredSize(new Dimension(125, 25)); 
         // add the label and field to the panel
         pricePanel.add(priceLabel);
-        pricePanel.add(priceField);
+        pricePanel.add(sellPriceField);
         leftPanel.add(pricePanel);
-    
         
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space between the input fields and the message area below
-    
-        // right side of the panel for the buttons (reset and sell)
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space
+
+        // Right side of the panel for the buttons (reset and sell)
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); 
-    
+        
         /* ~~ panel for the reset button ~~ */
         JButton resetButton = new JButton("Reset");
         resetButton.setPreferredSize(new Dimension(120, 50)); 
         resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sellSymbolField.setText("");
+                sellQuantityField.setText("");
+                sellPriceField.setText("");
+                sellMessageArea.setText("");
+            }
+        });
         JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         resetWrapper.add(resetButton); 
-    
+        
         /* ~~ panel for the sell button ~~ */
         JButton sellButton = new JButton("Sell");
         sellButton.setPreferredSize(new Dimension(120, 50)); 
         sellButton.setFont(new Font(sellButton.getFont().getName(), Font.PLAIN, 16));
+        sellButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleSellAction(sellSymbolField, sellQuantityField, sellPriceField);
+            }
+        });
+        
         JPanel sellWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         sellWrapper.add(sellButton); 
-    
-        // add the buttons to the panel
+        
         rightPanel.add(Box.createVerticalGlue()); 
         rightPanel.add(resetWrapper);
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
         rightPanel.add(sellWrapper);
-    
-        // add action listeners to the buttons to handle the actions when they are clicked, this was done previously in its own method for buy but i decided to do it here instead
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                symbolField.setText("");
-                quantityField.setText("");
-                priceField.setText("");
-                if (sellMessageArea != null) {
-                    sellMessageArea.setText("");
-                }
-            }
-        });
-        // action listener for the sell button to handle the sell action 
-        sellButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleSellAction(symbolField, quantityField, priceField);
-                updateGainPanel(totalGainField, individualGainsArea); // update the gain panel after the sale
-            }
-        });
         
-    
-        // add the left and right panels to a split pane
+        // Add the left and right panels to a split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setDividerLocation(400); 
         splitPane.setResizeWeight(0.7); 
         splitPane.setContinuousLayout(true);
         splitPane.setBorder(null);
-    
+        
         sellPanel.add(splitPane, BorderLayout.CENTER);
         sellPanel.add(createSellMessagePanel(), BorderLayout.SOUTH);
-    
+        
         return sellPanel;
     }
     
@@ -646,6 +658,7 @@ public class ePortfolioGUI extends JFrame {
         double payment = portfolio.sellInvestment(symbol, quantity, price); // sell the investment and get the payment amount
         // if the payment is greater than or equal to 0, display the success message with the payment amount
         if (payment >= 0) {
+            updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the new investment
             sellMessageArea.append("Investment sold successfully. Payment: $" + String.format("%.2f", payment) + "\n");
             
             if (portfolio.getInvestments().isEmpty()) {
@@ -668,17 +681,16 @@ public class ePortfolioGUI extends JFrame {
     private void updateUpdatePanel() {
 
         System.out.println("Portfolio size in updateUpdatePanel: " + portfolio.getInvestments().size());
+        System.out.println("Index: " + index);
         for (Investment investment : portfolio.getInvestments()) {
             System.out.println("Investment in portfolio: " + investment);
         }
 
-
-
         if (portfolio.getInvestments().isEmpty()) {
             System.out.println("Portfolio is empty in updateUpdatePanel.");
-            symbolField.setText("");
-            nameField.setText("");
-            priceField.setText("");
+            updateSymbolField.setText("");
+            updateNameField.setText("");
+            updatePriceField.setText("");
             updateMessageArea.setText("No investments to display.");
             prevButton.setEnabled(false);
             nextButton.setEnabled(false);
@@ -686,19 +698,19 @@ public class ePortfolioGUI extends JFrame {
             System.out.println("Portfolio is not empty. Size: " + portfolio.getInvestments().size());
             Investment current = portfolio.getInvestments().get(index);
             System.out.println("Displaying investment: " + current);
-            symbolField.setText(current.getSymbol());
-            nameField.setText(current.getName());
-            priceField.setText(String.valueOf(current.getPrice()));
+            updateSymbolField.setText(current.getSymbol());
+            updateNameField.setText(current.getName());
+            updatePriceField.setText(String.valueOf(current.getPrice()));
             updateMessageArea.setText(""); // clear messages
             prevButton.setEnabled(index > 0);
             nextButton.setEnabled(index < portfolio.getInvestments().size() - 1);
         }
-        
 
         // Revalidate and repaint the panel to ensure proper UI refresh
         panel.revalidate();
         panel.repaint();
     }
+
     
 
     /**
@@ -708,6 +720,11 @@ public class ePortfolioGUI extends JFrame {
     private JPanel createUpdatePanel() {
         JPanel updatePanel = new JPanel(new BorderLayout());
         updatePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+
+        updateSymbolField = new JTextField(15);
+        updateNameField = new JTextField(15);
+        updatePriceField = new JTextField(10);
+
 
         // left side of the panel for the input fields (symbol, name, and price)
         JPanel leftPanel = new JPanel();
@@ -727,11 +744,11 @@ public class ePortfolioGUI extends JFrame {
         JLabel symbolLabel = new JLabel("Symbol ");
         symbolLabel.setPreferredSize(new Dimension(100, 35));
         symbolLabel.setFont(new Font(symbolLabel.getFont().getName(), Font.PLAIN, 16));
-        //symbolField = new JTextField();
-        symbolField.setPreferredSize(new Dimension(150, 25));
-        symbolField.setEditable(false);
-        symbolPanel.add(symbolLabel); // add the label and field to the panel
-        symbolPanel.add(symbolField);
+        updateSymbolField.setPreferredSize(new Dimension(150, 25));
+        updateSymbolField.setEditable(false);
+        // add the label and field to the panel
+        symbolPanel.add(symbolLabel);
+        symbolPanel.add(updateSymbolField);
         leftPanel.add(symbolPanel);
 
         /* ~~ panel for the name input field ~~ */
@@ -739,11 +756,11 @@ public class ePortfolioGUI extends JFrame {
         JLabel nameLabel = new JLabel("Name ");
         nameLabel.setPreferredSize(new Dimension(100, 35));
         nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 16));
-        //nameField = new JTextField();
-        nameField.setPreferredSize(new Dimension(250, 25));
-        nameField.setEditable(false);
-        namePanel.add(nameLabel); // add the label and field to the panel
-        namePanel.add(nameField);
+        updateNameField.setPreferredSize(new Dimension(250, 25));
+        updateNameField.setEditable(false);
+        // add the label and field to the panel
+        namePanel.add(nameLabel);
+        namePanel.add(updateNameField);
         leftPanel.add(namePanel);
 
         /* ~~ panel for the price input field ~~ */
@@ -751,10 +768,10 @@ public class ePortfolioGUI extends JFrame {
         JLabel priceLabel = new JLabel("Price ");
         priceLabel.setPreferredSize(new Dimension(100, 35));
         priceLabel.setFont(new Font(priceLabel.getFont().getName(), Font.PLAIN, 16));
-        //priceField = new JTextField();
-        priceField.setPreferredSize(new Dimension(125, 25));
-        pricePanel.add(priceLabel); // add the label and field to the panel
-        pricePanel.add(priceField);
+        updatePriceField.setPreferredSize(new Dimension(125, 25));
+        // add the label and field to the panel
+        pricePanel.add(priceLabel);
+        pricePanel.add(updatePriceField);
         leftPanel.add(pricePanel);
 
         leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space between fields
@@ -792,64 +809,31 @@ public class ePortfolioGUI extends JFrame {
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         rightPanel.add(saveWrapper);
 
-        // if portfolio is empty, display no investments message and disable buttons
-        if (portfolio.getInvestments().isEmpty()) {
-            updateMessageArea.setText("No investments to display.");
-            symbolField.setText("");
-            nameField.setText("");
-            priceField.setText("");
-            prevButton.setEnabled(false);
-            nextButton.setEnabled(false);
-        } 
-        else {
-            Investment current = portfolio.getInvestments().get(index);
-            symbolField.setText(current.getSymbol());
-            nameField.setText(current.getName());
-            priceField.setText(String.valueOf(current.getPrice()));
-            updateMessageArea.setText(""); // clear messages
-            prevButton.setEnabled(false); // disable prev for the first investment
-            nextButton.setEnabled(portfolio.getInvestments().size() > 1); // enable next if more than one investment
-        }
-
-
-        // action listener for the prev button
+        // Add action listeners for the buttons
         prevButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (index > 0) {
                     index--;
-                    Investment current = portfolio.getInvestments().get(index);
-                    symbolField.setText(current.getSymbol());
-                    nameField.setText(current.getName());
-                    priceField.setText(String.valueOf(current.getPrice()));
-                    updateMessageArea.setText(""); // clear messages
+                    updateUpdatePanel();
                 }
-                prevButton.setEnabled(index > 0); // disable prev if at the first investment
-                nextButton.setEnabled(index < portfolio.getInvestments().size() - 1); // enable next if not at the last investment
             }
         });
 
-        // action listener for the next button
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (index < portfolio.getInvestments().size() - 1) {
                     index++;
-                    Investment current = portfolio.getInvestments().get(index);
-                    symbolField.setText(current.getSymbol());
-                    nameField.setText(current.getName());
-                    priceField.setText(String.valueOf(current.getPrice()));
-                    updateMessageArea.setText(""); // clear messages
+                    updateUpdatePanel();
                 }
-                prevButton.setEnabled(index > 0); // enable prev if not at the first investment
-                nextButton.setEnabled(index < portfolio.getInvestments().size() - 1); // disable next if at the last investment
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleUpdateAction(priceField, index);
+                handleUpdateAction(updatePriceField, index);
             }
         });
 
@@ -865,12 +849,6 @@ public class ePortfolioGUI extends JFrame {
 
         return updatePanel;
     }
-
-
-
-
-
-
 
     
     /**
@@ -905,16 +883,16 @@ public class ePortfolioGUI extends JFrame {
 
     /**
      * method to handle the update action when the save button is clicked
-     * @param priceField input field for the price
+     * @param updatePriceField input field for the price
      * @param investmentIndex index of the investment in the portfolio
      */
-    private void handleUpdateAction(JTextField priceField, int investmentIndex) {
+    private void handleUpdateAction(JTextField updatePriceField, int investmentIndex) {
 
         updateMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
     
         // try catch block to handle the if the user enters an invalid value for the price
         try {
-            double newPrice = Double.valueOf(priceField.getText().trim()); // get the new price from the field
+            double newPrice = Double.valueOf(updatePriceField.getText().trim()); // get the new price from the field
             // if the new price is less than or equal to 0, display an error message
             if (newPrice <= 0) {
                 updateMessageArea.append("Oops, price must be greater than zero!\n");
@@ -933,6 +911,7 @@ public class ePortfolioGUI extends JFrame {
             updateMessageArea.append("Oops, unable to update investment - index out of range!\n");
         }
     }
+
 
     /**
      * method to create the gain panel
@@ -962,10 +941,10 @@ public class ePortfolioGUI extends JFrame {
         totalGainPanel.add(totalGainLabel);
 
         /* ~~ panel for the total gain field ~~ */
-        totalGainField = new JTextField(10); 
-        totalGainField.setPreferredSize(new Dimension(100, 25));
-        totalGainField.setEditable(false);  // not editable by the user
-        totalGainPanel.add(totalGainField);
+        JTextField gainTotalField = new JTextField(10); // Use a dedicated field
+        gainTotalField.setPreferredSize(new Dimension(100, 25));
+        gainTotalField.setEditable(false);  // not editable by the user
+        totalGainPanel.add(gainTotalField);
         totalGainPanel.setAlignmentX(Component.LEFT_ALIGNMENT); 
         mainPanel.add(totalGainPanel);
 
@@ -979,13 +958,13 @@ public class ePortfolioGUI extends JFrame {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
         /* ~~ text area for the individual gains ~~ */
-        individualGainsArea = new JTextArea(15, 40); 
-        individualGainsArea.setEditable(false);  // not editable by the user
-        individualGainsArea.setLineWrap(true);  // wrap the text so that it fits in the text area
-        individualGainsArea.setWrapStyleWord(true); // wrap the text at words instead of letters, so that words are not split in half
+        JTextArea gainIndividualArea = new JTextArea(15, 40); // Use a dedicated field
+        gainIndividualArea.setEditable(false);  // not editable by the user
+        gainIndividualArea.setLineWrap(true);  // wrap the text so that it fits in the text area
+        gainIndividualArea.setWrapStyleWord(true); // wrap the text at words instead of letters, so that words are not split in half
 
         /* ~~ scroll pane for the text area ~~ */
-        JScrollPane gainsScrollPane = new JScrollPane(individualGainsArea);
+        JScrollPane gainsScrollPane = new JScrollPane(gainIndividualArea);
         gainsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  // always show the vertical scroll bar
         gainsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // always show the horizontal scroll bar
         gainsScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT); 
@@ -993,8 +972,14 @@ public class ePortfolioGUI extends JFrame {
         mainPanel.add(gainsScrollPane);
 
         gainPanel.add(mainPanel, BorderLayout.CENTER);
+
+        // Save dedicated fields to instance variables
+        totalGainField = gainTotalField;
+        individualGainsArea = gainIndividualArea;
+
         return gainPanel;
     }
+
 
 
     /**
@@ -1278,9 +1263,9 @@ public class ePortfolioGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (portfolio.getInvestments().isEmpty()) {
                     updateMessageArea.setText("No investments to display.");
-                    symbolField.setText("");
-                    nameField.setText("");
-                    priceField.setText("");
+                    updateSymbolField.setText("");
+                    updateNameField.setText("");
+                    updatePriceField.setText("");
                     prevButton.setEnabled(false);
                     nextButton.setEnabled(false);
                 } else {
@@ -1310,10 +1295,11 @@ public class ePortfolioGUI extends JFrame {
         gainItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel, "GAIN");
-                updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the latest portfolio data
+                updateGainPanel(totalGainField, individualGainsArea); // Add this call
+                cardLayout.show(panel, "GAIN"); // Switch to the Gain panel
             }
-        });    
+        });
+         
 
         // add the menu items to the options menu
         options.add(buyItem);
