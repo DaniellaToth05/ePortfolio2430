@@ -61,12 +61,10 @@ public class ePortfolioGUI extends JFrame {
     //private JTextArea gainMessageArea;
     private JTextArea searchMessageArea;
 
-    private JTextField totalGainField; // Declare totalGainField
+    private JTextField totalGainField;
     private JTextArea individualGainsArea;
 
     
-
-
     
     /**
      * constructor for the ePortfolio GUI
@@ -121,7 +119,6 @@ public class ePortfolioGUI extends JFrame {
         sellQuantityField = new JTextField(10);
         sellPriceField = new JTextField(10);
 
-
     
         // add each of the panels to the card layout so that they can be switched between
         panel.add(createMainPanel(), "MAIN");
@@ -172,6 +169,7 @@ public class ePortfolioGUI extends JFrame {
         JPanel buyPanel = new JPanel(new BorderLayout());
         buyPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
 
+        // declare the fields for the buy panel
         buySymbolField = new JTextField(15);
         buyNameField = new JTextField(15);
         buyQuantityField = new JTextField(10);
@@ -183,7 +181,7 @@ public class ePortfolioGUI extends JFrame {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        /* Title Panel */
+        /* ~~ title panel ~~ */
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel titleLabel = new JLabel("Buying an investment");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -191,7 +189,7 @@ public class ePortfolioGUI extends JFrame {
         leftPanel.add(titlePanel);
         leftPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        /* Type ComboBox Panel */
+        /* ~~ type comboBox panel ~~ */
         JPanel typePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel typeLabel = new JLabel("Type ");
         typeLabel.setPreferredSize(new Dimension(100, 35));
@@ -202,7 +200,7 @@ public class ePortfolioGUI extends JFrame {
         typePanel.add(typeComboBox);
         leftPanel.add(typePanel);
 
-        /* Symbol Field Panel */
+        /* ~~ symbol field panel ~~ */
         JPanel symbolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel symbolLabel = new JLabel("Symbol ");
         symbolLabel.setPreferredSize(new Dimension(100, 35));
@@ -212,7 +210,7 @@ public class ePortfolioGUI extends JFrame {
         symbolPanel.add(buySymbolField);
         leftPanel.add(symbolPanel);
 
-        /* Name Field Panel */
+        /* ~~ name field panel ~~ */
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel nameLabel = new JLabel("Name ");
         nameLabel.setPreferredSize(new Dimension(100, 35));
@@ -222,7 +220,7 @@ public class ePortfolioGUI extends JFrame {
         namePanel.add(buyNameField);
         leftPanel.add(namePanel);
 
-        /* Quantity Field Panel */
+        /* ~~ quantity field panel ~~ */
         JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel quantityLabel = new JLabel("Quantity ");
         quantityLabel.setPreferredSize(new Dimension(100, 35));
@@ -232,7 +230,7 @@ public class ePortfolioGUI extends JFrame {
         quantityPanel.add(buyQuantityField);
         leftPanel.add(quantityPanel);
 
-        /* Price Field Panel */
+        /* ~~ price field panel ~~ */
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel priceLabel = new JLabel("Price ");
         priceLabel.setPreferredSize(new Dimension(100, 35));
@@ -253,6 +251,8 @@ public class ePortfolioGUI extends JFrame {
         JButton resetButton = new JButton("Reset");
         resetButton.setPreferredSize(new Dimension(120, 50));
         resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
+
+        // action listener for the reset button to clear the fields
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,30 +263,34 @@ public class ePortfolioGUI extends JFrame {
                 buyMessageArea.setText("");
             }
         });
-        JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Center-align reset button
+
+        JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); 
         resetWrapper.add(resetButton);
 
-        /* ~~ Panel for the Buy Button ~~ */
+        /* ~~ panel for the buy button ~~ */
         JButton buyButton = new JButton("Buy");
         buyButton.setPreferredSize(new Dimension(120, 50));
         buyButton.setFont(new Font(buyButton.getFont().getName(), Font.PLAIN, 16));
+
+        // action listener for the buy button to buy the investment
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleBuyAction(typeComboBox, buySymbolField, buyNameField, buyQuantityField, buyPriceField);
             }
         });
-        JPanel buyWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Center-align buy button
+
+        JPanel buyWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER)); 
         buyWrapper.add(buyButton);
 
-        // Add buttons to the right panel
+        // add the reset and buy buttons to the right panel
         rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(resetWrapper);
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         rightPanel.add(buyWrapper);
         
 
-        // Add panels to a split pane
+        // add the left and right panels to a split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setDividerLocation(400);
         splitPane.setResizeWeight(0.7);
@@ -300,8 +304,6 @@ public class ePortfolioGUI extends JFrame {
     }
 
 
-
-    
     /**
      * method to create the message panel specific to the buy panel
      * @return the panel for the buy messages
@@ -343,7 +345,7 @@ public class ePortfolioGUI extends JFrame {
      */
     private void handleBuyAction(JComboBox<String> typeComboBox, JTextField buySymbolField, JTextField buyNameField, JTextField buyQuantityField, JTextField buyPriceField) {
         try {
-            System.out.println("handleBuyAction triggered"); // Debugging
+            System.out.println("handleBuyAction triggered"); // debugging print statement
     
             // get the input values from the fields like the type of investment, symbol, name, quantity, and price
             String type = (String) typeComboBox.getSelectedItem();
@@ -394,7 +396,8 @@ public class ePortfolioGUI extends JFrame {
                     buyMessageArea.append("Oops, you can't purchase " + quantity + " units!\n");
                     return;
                 }
-            } catch (NumberFormatException ex) { // catch the exception if the user enters a non-integer value
+            } 
+            catch (NumberFormatException ex) { // catch the exception if the user enters a non-integer value
                 System.out.println("Quantity is not a valid number");
                 buyMessageArea.append("Sorry, please enter a valid quantity.\n");
                 return;
@@ -410,7 +413,8 @@ public class ePortfolioGUI extends JFrame {
                     buyMessageArea.append("Oops, you can't purchase units for $" + price + "!\n");
                     return;
                 }
-            } catch (NumberFormatException ex) {
+            } 
+            catch (NumberFormatException ex) {
                 System.out.println("Price is not a valid number");
                 buyMessageArea.append("Sorry, please enter a valid price.\n");
                 return;
@@ -440,29 +444,31 @@ public class ePortfolioGUI extends JFrame {
             updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the new investment
 
 
-            // Traditional for loop to determine the last index
+            // loop through the investments in the portfolio to get the index of the new investment
             index = portfolio.getInvestments().size() - 1;
             for (int i = 0; i < portfolio.getInvestments().size(); i++) {
                 if (i == portfolio.getInvestments().size() - 1) {
                     index = i;
                 }
             }
-    
-            System.out.println("Index after buying: " + index);
+            
+            
+            System.out.println("Index after buying: " + index); // debugging statement
+
             buyMessageArea.append("Investment added successfully!\n"); // display the success message when the investment is added
     
-            updateUpdatePanel(); // Ensure the update panel is refreshed
+            updateUpdatePanel(); // refresh the update panel with the new investment
     
       
     
-        } catch (Exception ex) { // catch any other exceptions that could happen
-            System.out.println("An unexpected exception occurred: " + ex.getMessage());
-            ex.printStackTrace();
-            buyMessageArea.append("An unexpected error occurred. Please try again.\n");
+        } 
+        catch (Exception ex) { // catch any other exceptions that could happen
+            System.out.println("Sorry, an unexpected exception occurred: " + ex.getMessage());
+            ex.printStackTrace(); // debug print the stack trace
+            buyMessageArea.append("Sorry, an unexpected error occurred. Please try again.\n");
         }
     }
 
-    
 
     /**
      * method to create the sell investment panel
@@ -477,7 +483,7 @@ public class ePortfolioGUI extends JFrame {
         sellQuantityField = new JTextField(10);
         sellPriceField = new JTextField(10);
 
-        // Left side of the panel for the input fields (symbol, quantity, and price)
+        // left side of the panel for the input fields (symbol, quantity, and price)
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
@@ -525,7 +531,7 @@ public class ePortfolioGUI extends JFrame {
         
         leftPanel.add(Box.createRigidArea(new Dimension(0, 16))); // add space
 
-        // Right side of the panel for the buttons (reset and sell)
+        // right side of the panel for the buttons (reset and sell)
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10)); 
@@ -534,6 +540,8 @@ public class ePortfolioGUI extends JFrame {
         JButton resetButton = new JButton("Reset");
         resetButton.setPreferredSize(new Dimension(120, 50)); 
         resetButton.setFont(new Font(resetButton.getFont().getName(), Font.PLAIN, 16));
+
+        // action listener for the reset button to clear the fields
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -543,6 +551,7 @@ public class ePortfolioGUI extends JFrame {
                 sellMessageArea.setText("");
             }
         });
+
         JPanel resetWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         resetWrapper.add(resetButton); 
         
@@ -550,6 +559,8 @@ public class ePortfolioGUI extends JFrame {
         JButton sellButton = new JButton("Sell");
         sellButton.setPreferredSize(new Dimension(120, 50)); 
         sellButton.setFont(new Font(sellButton.getFont().getName(), Font.PLAIN, 16));
+
+        // action listener for the sell button to sell the investment
         sellButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -565,7 +576,7 @@ public class ePortfolioGUI extends JFrame {
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
         rightPanel.add(sellWrapper);
         
-        // Add the left and right panels to a split pane
+        // add the left and right panels to a split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setDividerLocation(400); 
         splitPane.setResizeWeight(0.7); 
@@ -680,10 +691,13 @@ public class ePortfolioGUI extends JFrame {
      */
     private void updateUpdatePanel() {
 
+        // debugging print statements
         System.out.println("Portfolio size in updateUpdatePanel: " + portfolio.getInvestments().size());
         System.out.println("Index: " + index);
-        for (Investment investment : portfolio.getInvestments()) {
-            System.out.println("Investment in portfolio: " + investment);
+
+        // loop through the investments in the portfolio and print them to debug    
+        for(int i = 0; i < portfolio.getInvestments().size(); i++) {
+            System.out.println(portfolio.getInvestments().get(i));
         }
 
         if (portfolio.getInvestments().isEmpty()) {
@@ -694,7 +708,8 @@ public class ePortfolioGUI extends JFrame {
             updateMessageArea.setText("No investments to display.");
             prevButton.setEnabled(false);
             nextButton.setEnabled(false);
-        } else {
+        } 
+        else {
             System.out.println("Portfolio is not empty. Size: " + portfolio.getInvestments().size());
             Investment current = portfolio.getInvestments().get(index);
             System.out.println("Displaying investment: " + current);
@@ -706,7 +721,7 @@ public class ePortfolioGUI extends JFrame {
             nextButton.setEnabled(index < portfolio.getInvestments().size() - 1);
         }
 
-        // Revalidate and repaint the panel to ensure proper UI refresh
+        // revalidate and repaint the panel
         panel.revalidate();
         panel.repaint();
     }
@@ -809,7 +824,7 @@ public class ePortfolioGUI extends JFrame {
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         rightPanel.add(saveWrapper);
 
-        // Add action listeners for the buttons
+        // action listener for the previous button
         prevButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -819,7 +834,7 @@ public class ePortfolioGUI extends JFrame {
                 }
             }
         });
-
+        // action listener for the next button
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -829,7 +844,7 @@ public class ePortfolioGUI extends JFrame {
                 }
             }
         });
-
+        // action listener for the save button
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -837,7 +852,7 @@ public class ePortfolioGUI extends JFrame {
             }
         });
 
-        // Add the left and right panels to a split pane
+        // add the left and right panels to a split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setDividerLocation(400);
         splitPane.setResizeWeight(0.7);
@@ -941,7 +956,7 @@ public class ePortfolioGUI extends JFrame {
         totalGainPanel.add(totalGainLabel);
 
         /* ~~ panel for the total gain field ~~ */
-        JTextField gainTotalField = new JTextField(10); // Use a dedicated field
+        JTextField gainTotalField = new JTextField(10); 
         gainTotalField.setPreferredSize(new Dimension(100, 25));
         gainTotalField.setEditable(false);  // not editable by the user
         totalGainPanel.add(gainTotalField);
@@ -958,7 +973,7 @@ public class ePortfolioGUI extends JFrame {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
         /* ~~ text area for the individual gains ~~ */
-        JTextArea gainIndividualArea = new JTextArea(15, 40); // Use a dedicated field
+        JTextArea gainIndividualArea = new JTextArea(15, 40); 
         gainIndividualArea.setEditable(false);  // not editable by the user
         gainIndividualArea.setLineWrap(true);  // wrap the text so that it fits in the text area
         gainIndividualArea.setWrapStyleWord(true); // wrap the text at words instead of letters, so that words are not split in half
@@ -973,7 +988,7 @@ public class ePortfolioGUI extends JFrame {
 
         gainPanel.add(mainPanel, BorderLayout.CENTER);
 
-        // Save dedicated fields to instance variables
+        // these set the total gain field and individual gains area to be used in the updateGainPanel method
         totalGainField = gainTotalField;
         individualGainsArea = gainIndividualArea;
 
@@ -983,7 +998,7 @@ public class ePortfolioGUI extends JFrame {
 
 
     /**
-     * Method to update the gain panel with the latest portfolio data.
+     * method to update the gain panel with the latest portfolio data.
      */
     private void updateGainPanel(JTextField totalGainField, JTextArea individualGainsArea) {
         double realizedGain = portfolio.getTotalGain(); // get realized gains (from sold investments)
@@ -1230,7 +1245,7 @@ public class ePortfolioGUI extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu options = new JMenu("Commands"); // commands menu
         options.setFont(new Font(options.getFont().getName(), Font.PLAIN, 20));
-        options.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); // add 20px padding on the left and 10px padding below
+        options.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0)); 
 
         // menu items for the commands
         JMenuItem buyItem = new JMenuItem("Buy");
@@ -1255,9 +1270,7 @@ public class ePortfolioGUI extends JFrame {
                 cardLayout.show(panel, "SELL");
             }
         });
-        /**
-         * action listener for the update item to switch to the update panel
-         */
+        // action listener for the update item to switch to the update panel
         updateItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1268,11 +1281,12 @@ public class ePortfolioGUI extends JFrame {
                     updatePriceField.setText("");
                     prevButton.setEnabled(false);
                     nextButton.setEnabled(false);
-                } else {
-                    index = 0; // Start with the first investment
-                    updateUpdatePanel(); // Refresh the update panel with the current investment
+                } 
+                else {
+                    index = 0; // start with the first investment
+                    updateUpdatePanel(); // refresh the update panel with the current investment
                 }
-                cardLayout.show(panel, "UPDATE"); // Switch to the UPDATE panel
+                
             }
         });
         
@@ -1295,8 +1309,8 @@ public class ePortfolioGUI extends JFrame {
         gainItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateGainPanel(totalGainField, individualGainsArea); // Add this call
-                cardLayout.show(panel, "GAIN"); // Switch to the Gain panel
+                updateGainPanel(totalGainField, individualGainsArea); 
+                cardLayout.show(panel, "GAIN"); // update the gain panel with the latest portfolio data by calling it again to show
             }
         });
          
