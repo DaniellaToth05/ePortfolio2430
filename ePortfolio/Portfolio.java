@@ -12,6 +12,7 @@ import java.util.HashSet;
 public class Portfolio {
     private ArrayList<Investment> investments; // list of investments in the portfolio
     private HashMap<String, ArrayList<Investment>> mapKeyword; // map of keywords to investments
+    private double keepTotalGain; // total gain from selling investments
 
     /**
      * method to create an empty portfolio
@@ -19,6 +20,8 @@ public class Portfolio {
     public Portfolio(){
         this.investments = new ArrayList<>();
         this.mapKeyword = new HashMap<>();
+        this.keepTotalGain = 0.0;
+        
     }
 
     /**
@@ -28,6 +31,14 @@ public class Portfolio {
      */
     public ArrayList<Investment> getInvestments() {
         return investments;
+    }
+
+    /**
+     * method to get the total gain so that it counts gains that are removed from the portfolio
+     * @return the total gain
+     */
+    public double getTotalGain() {
+    return keepTotalGain;
     }
 
 
@@ -136,6 +147,7 @@ public class Portfolio {
 
                     // remove it from the portfolio if the number of shares is zero
                     if(stock.getQuantity() == 0){
+                        keepTotalGain = keepTotalGain + stock.calculateGain(); // add the gain to the total gain
                         for(int j = 0; j < investments.size(); j++){
                             if(investments.get(j).equals(stock)){
                                 investments.remove(j); // remove the mutual fund from the list
@@ -179,6 +191,7 @@ public class Portfolio {
 
                     // remove it from portfolio if number of units is zero
                     if(fund.getQuantity() == 0){
+                        keepTotalGain = keepTotalGain + fund.calculateGain(); // add the gain to the total gain
                         for(int j = 0; j < investments.size(); j++){
                             if(investments.get(j).equals(fund)){
                                 investments.remove(j); // remove the mutual fund from the list
@@ -226,27 +239,23 @@ public class Portfolio {
      * 
      * @return the total gain/loss
      */
-    public double calculateTotalGain(){
+    public double calculateTotalGain() {
         double totalGain = 0.0;
 
         // calculate total gain from investments
-        if (investments != null && investments.size() > 0){
-            for(int i = 0; i < investments.size(); i++){
-                Investment investment = investments.get(i); 
-                if(investment instanceof Stock){
-                    Stock stock = (Stock) investment; // cast the investment to a stock
-                    double stockGain = stock.calculateGain(); // calculate the gain from the stock
-                    totalGain = totalGain + stockGain; // calculate the gain from the stock
-                }
-                else if(investment instanceof MutualFund){
-                    MutualFund fund = (MutualFund) investment; // cast the investment to a mutual fund
-                    double fundGain = fund.calculateGain(); // calculate the gain from the mutual fund  
-                    totalGain = totalGain + fundGain; // calculate the gain from the mutual fund
-                }
+        if (investments != null && investments.size() > 0) {
+            for (int i = 0; i < investments.size(); i++) { // iterate through the list of investments
+                Investment investment = investments.get(i); // get the investment at index i
+
+                // use polymorphism to calculate the gain for the current investment
+                double gain = investment.calculateGain(); // calculate the gain using the overridden method
+                totalGain = totalGain + gain; // add the gain to the total gain
             }
         }
-        return totalGain;
+
+        return totalGain; // return the total gain
     }
+
 
     /**
      * method to update the price of all investments in the portfolio
