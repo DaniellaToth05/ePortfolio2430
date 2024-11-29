@@ -996,21 +996,19 @@ public class ePortfolioGUI extends JFrame {
      * method to update the gain panel with the latest portfolio data.
      */
     private void updateGainPanel(JTextField totalGainField, JTextArea individualGainsArea) {
-        double realizedGain = portfolio.getTotalGain(); // get realized gains (from sold investments)
-        double unrealizedGain = 0.0; // sum up gains from remaining investments
+        double totalGain = portfolio.getTotalGain(); // get realized gains (from sold investments)
 
         String individualGainsText = ""; // initialize the text for the individual gains
         // loop through each investment in the portfolio to calculate individual gains
         for (int i = 0; i < portfolio.getInvestments().size(); i++) {
             Investment investment = portfolio.getInvestments().get(i); // get the investment
             double gain = investment.calculateGain(); // calculate the unrealized gain for the investment
-            unrealizedGain = unrealizedGain + gain; // add to the total unrealized gain
 
             // add the investment details and gain to the text area
-            individualGainsText = individualGainsText + investment.toString() + " | Gain: " + String.format("%.2f", gain) + "\n";
+            individualGainsText = individualGainsText + investment.getSymbol() + " | Gain: " + String.format("%.2f", gain) + "\n";
         }
 
-        double totalGain = realizedGain + unrealizedGain; // calculate the total gain
+        // update the total gain field and individual gains area
         totalGainField.setText(String.format("%.2f", totalGain)); // update the total gain field
         individualGainsArea.setText(individualGainsText); // update the individual gains area
     }

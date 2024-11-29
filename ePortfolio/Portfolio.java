@@ -39,7 +39,13 @@ public class Portfolio {
      * @return the total gain
      */
     public double getTotalGain() {
-    return keepTotalGain;
+        double currentGain = 0.0; // variable to store the current gain
+
+        for (int i = 0; i < investments.size(); i++) {
+            Investment investment = investments.get(i); // get the investment at index i
+            currentGain = currentGain + investment.calculateGain(); // calculate the gain for the current investment
+        }
+        return keepTotalGain + currentGain; // return the total gain including the removed investments
     }
 
 
@@ -96,15 +102,15 @@ public class Portfolio {
             if (investment.getSymbol().equalsIgnoreCase(symbol)) {
                 double payment = investment.sell(quantity, price); // polymorphic call to sell method
     
-                // if all units are sold, remove the investment and update total realized gain
+                // if all units are sold, remove the investment and update total gain
                 if (investment.getQuantity() == 0) {
-                    keepTotalGain += investment.calculateGain(); // add the realized gain to total gain
+                    keepTotalGain = keepTotalGain + (quantity * price) - investment.getBookValue(); // update the total gain
                     investments.remove(i); // remove the investment from the portfolio
     
                     // update the keyword map to remove the sold investment
                     String[] keywords = investment.getName().split(" "); // split the investment name into keywords
-                    for (String keyword : keywords) {
-                        keyword = keyword.trim().toLowerCase(); // normalize the keyword
+                    for (int j = 0; j < keywords.length; j++) {
+                        String keyword = keywords[j].trim().toLowerCase(); // normalize the keyword
     
                         // if the keyword exists, remove the investment from its list
                         if (mapKeyword.containsKey(keyword)) {
@@ -117,6 +123,7 @@ public class Portfolio {
                             }
                         }
                     }
+                    i--; // decrement the index to account for the removed investment
                 }
     
                 return payment; // return the payment for the sold investment
