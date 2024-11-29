@@ -1,7 +1,7 @@
 package ePortfolio;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.HashMap;
@@ -201,8 +201,8 @@ public class Portfolio {
      * @return the search results
      */
     public String searchForInvestment(String symbolInput, String keywordsInput, String priceRangeInput) {
-        String results = "";
-        ArrayList<Investment> matchedInvestments = new ArrayList<>();
+        String results = ""; // variable to store the search results
+        ArrayList<Investment> matchedInvestments = new ArrayList<>(); // list of investments that match the search criteria
 
         // // debugging
         // System.out.println("all investments in the portfolio:");
@@ -224,29 +224,28 @@ public class Portfolio {
                 if(mapKeyword.containsKey(keyword)){
                     HashSet<Investment> keywordMatches = new HashSet<>(mapKeyword.get(keyword)); // investments for this keyword
 
+                    // if this is the first keyword, add all the investments
                     if(matchedKeyword == null){
-                        matchedKeyword = new HashSet<>(keywordMatches);
-                    }
+                        matchedKeyword = new HashSet<>(keywordMatches); 
+                    } 
+                    // otherwise, retain only the investments that match this keyword
                     else{
                         matchedKeyword.retainAll(keywordMatches);
                     }
                 }
+                // otherwise, no matches for this keyword
                 else {
-                    matchedKeyword = new HashSet<>();
-                    break;
+                    matchedKeyword = new HashSet<>(); // so set the list to empty
+                    break; 
                 }
             }
-
+            // add the matched investments to the list
             if(matchedKeyword != null){
                 matchedInvestments.addAll(matchedKeyword);
             }
-            // // debugging 
-            // System.out.println("Matched investments after keyword filtering:");
-            for (Investment investment : matchedInvestments) {
-                System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
-            }
 
         }
+        // otherwise, add all investments to the list
         else {
             matchedInvestments.addAll(investments);
         }
@@ -256,43 +255,45 @@ public class Portfolio {
             for(int i = matchedInvestments.size() -1; i >= 0; i--){
                 Investment investment = matchedInvestments.get(i);
                 if(!investment.getSymbol().equalsIgnoreCase(symbolInput)){
-                    matchedInvestments.remove(i);
+                    matchedInvestments.remove(i); // remove the investment if the symbol doesn't match
                 }
             }
         }
-        // debugging
-        System.out.println("Matched investments after symbol filtering:");
-        for (Investment investment : matchedInvestments) {
-            System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
-        }
+        // // // debugging
+        // // System.out.println("Matched investments after symbol filtering:");
+        // for (Investment investment : matchedInvestments) {
+        //     System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
+        // }
 
 
         // filter the matched investments based on the price range
         if (!priceRangeInput.isEmpty()) {
             for (int i = matchedInvestments.size() - 1; i >= 0; i--) {
-                Investment investment = matchedInvestments.get(i);
+                Investment investment = matchedInvestments.get(i); // get the investment at index i
                 try {
-                    System.out.println("Checking price for investment: " + investment.getSymbol() + " - Price: " + investment.getPrice());
+                    // System.out.println("Checking price for investment: " + investment.getSymbol() + " - Price: " + investment.getPrice()); // debugging
                     if (!matchesPrice(investment.getPrice(), priceRangeInput)) {
-                        System.out.println("Investment does not match price range: " + priceRangeInput);
-                        matchedInvestments.remove(i);
-                    } else {
-                        System.out.println("Investment matches price range: " + priceRangeInput);
+                        //System.out.println("Investment does not match price range: " + priceRangeInput); // debugging
+                        matchedInvestments.remove(i); // remove the investment if it doesn't match the price range
+                    } 
+                    else {
+                        //System.out.println("Investment matches price range: " + priceRangeInput);
                     }
-                } catch (Exception e) {
+                } 
+                catch (Exception e) {
                     System.out.println("Error while checking price for investment: " + investment.getSymbol());
-                    e.printStackTrace();
+                    e.printStackTrace(); // print the stack trace for debugging
                     matchedInvestments.remove(i); // exclude the investment if an error occurs
                 }
             }
         }
         
 
-        // debugging
-        System.out.println("Final matched investments:");
-        for (Investment investment : matchedInvestments) {
-            System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
-        }
+        // // debugging
+        // System.out.println("Final matched investments:");
+        // for (Investment investment : matchedInvestments) {
+        //     System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
+        // }
 
         // loop through the matched investments and add the ones that match the symbol and price range
         for(int i = 0; i < matchedInvestments.size(); i++){
@@ -389,18 +390,18 @@ public class Portfolio {
     // method to check if the price of the investment matches the inputted price range
     private boolean matchesPrice(double price, String priceRangeInput) {
         priceRangeInput = priceRangeInput.trim();
-        System.out.println("Initial input: " + priceRangeInput);
+        // System.out.println("initial input: " + priceRangeInput); // debugging
     
         Double lowerRange = null;
         Double upperRange = null;
     
-        if (priceRangeInput.isEmpty()) {
-            System.out.println("Price range is empty, returning true.");
+        if (priceRangeInput.isEmpty()) { 
+            // System.out.println("price range is empty, returning true."); // debugging
             return true; // if no range is given, all prices are valid
         }
     
         String[] priceRangeSplit = priceRangeInput.split("-", -1); // include empty strings for missing bounds
-        System.out.println("Split price range input: " + Arrays.toString(priceRangeSplit));
+        // System.out.println("split price range input: " + Arrays.toString(priceRangeSplit)); // debugging
     
         // handle missing lower or upper bounds
         if (priceRangeSplit.length == 2) {
@@ -411,9 +412,10 @@ public class Portfolio {
             if (!lowerRangeString.isEmpty()) {
                 try {
                     lowerRange = Double.valueOf(lowerRangeString);
-                    System.out.println("Parsed lower range: " + lowerRange);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid lower range input: " + lowerRangeString);
+                    // System.out.println("lower range: " + lowerRange); // debugging
+                } 
+                catch (NumberFormatException e) {
+                    System.out.println("invalid lower range input: " + lowerRangeString);
                     return false;
                 }
             }
@@ -422,8 +424,9 @@ public class Portfolio {
             if (!upperRangeString.isEmpty()) {
                 try {
                     upperRange = Double.valueOf(upperRangeString);
-                    System.out.println("Parsed upper range: " + upperRange);
-                } catch (NumberFormatException e) {
+                    // System.out.println("upper range: " + upperRange); // debugging
+                } 
+                catch (NumberFormatException e) {
                     System.out.println("Invalid upper range input: " + upperRangeString);
                     return false;
                 }
@@ -431,23 +434,24 @@ public class Portfolio {
     
             // ensure lower range is not higher than upper range
             if (lowerRange != null && upperRange != null && lowerRange > upperRange) {
-                System.out.println("Invalid range: Lower range cannot be higher than upper range.");
+                System.out.println("this is an invalid range, lower range cannot be higher than upper range.");
                 return false;
             }
-        } else {
-            System.out.println("Invalid range input: " + priceRangeInput);
+        } 
+        else {
+            //System.out.println("invalid range input: " + priceRangeInput);
             return false; // invalid format
         }
     
-        // debug output to confirm parsed ranges
-        System.out.println("Price: " + price + ", Lower range: " + lowerRange + ", Upper range: " + upperRange);
+        // // debug output to confirm parsed ranges
+        // System.out.println("Price: " + price + ", Lower range: " + lowerRange + ", Upper range: " + upperRange);
     
         // check against the lower and upper range
         boolean isGreaterOrEqual = (lowerRange == null || price >= lowerRange);
         boolean isLessOrEqual = (upperRange == null || price <= upperRange);
     
-        // debug the range checks
-        System.out.println("isGreaterOrEqual: " + isGreaterOrEqual + ", isLessOrEqual: " + isLessOrEqual);
+        // // debug the range checks
+        // System.out.println("isGreaterOrEqual: " + isGreaterOrEqual + ", isLessOrEqual: " + isLessOrEqual);
     
         // only return true if both conditions are met
         return isGreaterOrEqual && isLessOrEqual;
