@@ -1009,7 +1009,7 @@ public class ePortfolioGUI extends JFrame {
         for (int i = 0; i < portfolio.getInvestments().size(); i++) {
             Investment investment = portfolio.getInvestments().get(i); // get the investment
             double gain = investment.calculateGain(); // calculate the unrealized gain for the investment
-            unrealizedGain += gain; // add to the total unrealized gain
+            unrealizedGain = unrealizedGain + gain; // add to the total unrealized gain
 
             // add the investment details and gain to the text area
             individualGainsText += investment.toString() + " | Gain: " + String.format("%.2f", gain) + "\n";

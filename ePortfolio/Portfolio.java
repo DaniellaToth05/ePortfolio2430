@@ -195,7 +195,7 @@ public class Portfolio {
         // tokenize keywords into individual words 
         if (!keywordsInput.isEmpty()) {
             StringTokenizer tokenizer = new StringTokenizer(keywordsInput, " ");
-            HashSet<Investment> matchedKeyword = new HashSet<>();
+            HashSet<Investment> matchedKeyword = null;
             
             // loop through each keyword and add the investments that match
             while (tokenizer.hasMoreTokens()) {
@@ -203,27 +203,28 @@ public class Portfolio {
 
                 // if the keyword is in the map, add the investments that match
                 if(mapKeyword.containsKey(keyword)){
-                    ArrayList<Investment> investmentsKeyword = mapKeyword.get(keyword);
+                    HashSet<Investment> keywordMatches = new HashSet<>(mapKeyword.get(keyword)); // investments for this keyword
 
-                    // add the investments that match the keyword
-                    for(int i = 0; i < investmentsKeyword.size(); i++){
-                        Investment currentInvestment = investmentsKeyword.get(i);
-                        matchedKeyword.add(currentInvestment);
-
+                    if(matchedKeyword == null){
+                        matchedKeyword = new HashSet<>(keywordMatches);
+                    }
+                    else{
+                        matchedKeyword.retainAll(keywordMatches);
                     }
                 }
+                else {
+                    matchedKeyword = new HashSet<>();
+                    break;
+                }
             }
-            // add the matched investments to the list
-            matchedInvestments.addAll(matchedKeyword);
+
+            if(matchedKeyword != null){
+                matchedInvestments.addAll(matchedKeyword);
+            }
         }
         else {
-            // if no keywords are given, add all investments to the list
-            for(int i = 0; i < investments.size(); i++){
-                matchedInvestments.add(investments.get(i));
-            }
-            
+            matchedInvestments.addAll(investments);
         }
-
         // filter the matched investments based on the symbol 
         if(!symbolInput.isEmpty()){
             // loop through the matched investments and remove the ones that don't match the symbol
