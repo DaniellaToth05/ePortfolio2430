@@ -1,6 +1,7 @@
 package ePortfolio;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.HashMap;
@@ -203,6 +204,13 @@ public class Portfolio {
         String results = "";
         ArrayList<Investment> matchedInvestments = new ArrayList<>();
 
+        // // debugging
+        // System.out.println("all investments in the portfolio:");
+        // for (Investment investment : investments) {
+        //     System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
+        // }
+
+
         // tokenize keywords into individual words 
         if (!keywordsInput.isEmpty()) {
             StringTokenizer tokenizer = new StringTokenizer(keywordsInput, " ");
@@ -232,6 +240,12 @@ public class Portfolio {
             if(matchedKeyword != null){
                 matchedInvestments.addAll(matchedKeyword);
             }
+            // // debugging 
+            // System.out.println("Matched investments after keyword filtering:");
+            for (Investment investment : matchedInvestments) {
+                System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
+            }
+
         }
         else {
             matchedInvestments.addAll(investments);
@@ -246,15 +260,38 @@ public class Portfolio {
                 }
             }
         }
+        // debugging
+        System.out.println("Matched investments after symbol filtering:");
+        for (Investment investment : matchedInvestments) {
+            System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
+        }
+
+
         // filter the matched investments based on the price range
-        if(!priceRangeInput.isEmpty()){
-            // loop through the matched investments and remove the ones that don't match the price range
-            for(int i = matchedInvestments.size() -1; i >=0; i--){
+        if (!priceRangeInput.isEmpty()) {
+            for (int i = matchedInvestments.size() - 1; i >= 0; i--) {
                 Investment investment = matchedInvestments.get(i);
-                if(!matchesPrice(investment.getPrice(), priceRangeInput)){
-                    matchedInvestments.remove(i);
+                try {
+                    System.out.println("Checking price for investment: " + investment.getSymbol() + " - Price: " + investment.getPrice());
+                    if (!matchesPrice(investment.getPrice(), priceRangeInput)) {
+                        System.out.println("Investment does not match price range: " + priceRangeInput);
+                        matchedInvestments.remove(i);
+                    } else {
+                        System.out.println("Investment matches price range: " + priceRangeInput);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error while checking price for investment: " + investment.getSymbol());
+                    e.printStackTrace();
+                    matchedInvestments.remove(i); // exclude the investment if an error occurs
                 }
             }
+        }
+        
+
+        // debugging
+        System.out.println("Final matched investments:");
+        for (Investment investment : matchedInvestments) {
+            System.out.println(investment.getSymbol() + " - Price: " + investment.getPrice());
         }
 
         // loop through the matched investments and add the ones that match the symbol and price range
@@ -349,68 +386,75 @@ public class Portfolio {
     //     return true;
     // }
 
-    // check if the price of the investment matches the inputted price range
+    // method to check if the price of the investment matches the inputted price range
     private boolean matchesPrice(double price, String priceRangeInput) {
-        // split the price range input into lower and upper ranges
         priceRangeInput = priceRangeInput.trim();
-
+        System.out.println("Initial input: " + priceRangeInput);
+    
         Double lowerRange = null;
         Double upperRange = null;
-
-        if(priceRangeInput.isEmpty()){
-            return true; // if no range is given then all prices are valid
+    
+        if (priceRangeInput.isEmpty()) {
+            System.out.println("Price range is empty, returning true.");
+            return true; // if no range is given, all prices are valid
         }
-
-        String[] priceRangeSplit = priceRangeInput.split("-"); // split the input into lower and upper range based on - symbol
-
-        // if theres only one number its an exact price
-        if(priceRangeSplit.length == 1){
-            String exactPriceString = priceRangeSplit[0].trim();
-            if(!exactPriceString.isEmpty()){
-                double exactPrice = Double.valueOf(exactPriceString);
-                if(price == exactPrice){
-                    return true;
-                }
-                else{
+    
+        String[] priceRangeSplit = priceRangeInput.split("-", -1); // include empty strings for missing bounds
+        System.out.println("Split price range input: " + Arrays.toString(priceRangeSplit));
+    
+        // handle missing lower or upper bounds
+        if (priceRangeSplit.length == 2) {
+            String lowerRangeString = priceRangeSplit[0].trim();
+            String upperRangeString = priceRangeSplit[1].trim();
+    
+            // parse the lower range
+            if (!lowerRangeString.isEmpty()) {
+                try {
+                    lowerRange = Double.valueOf(lowerRangeString);
+                    System.out.println("Parsed lower range: " + lowerRange);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid lower range input: " + lowerRangeString);
                     return false;
                 }
             }
-        }
-
-        // if it has two parts then its a range
-        if(priceRangeSplit.length == 2){
-            String lowerRangeString = priceRangeSplit[0].trim();
-            if(!lowerRangeString.isEmpty()){
-                lowerRange = Double.valueOf(lowerRangeString);
+    
+            // parse the upper range
+            if (!upperRangeString.isEmpty()) {
+                try {
+                    upperRange = Double.valueOf(upperRangeString);
+                    System.out.println("Parsed upper range: " + upperRange);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid upper range input: " + upperRangeString);
+                    return false;
+                }
             }
-
-            String upperRangeString = priceRangeSplit[1].trim();
-            if(!upperRangeString.isEmpty()){
-                upperRange = Double.valueOf(upperRangeString);
+    
+            // ensure lower range is not higher than upper range
+            if (lowerRange != null && upperRange != null && lowerRange > upperRange) {
+                System.out.println("Invalid range: Lower range cannot be higher than upper range.");
+                return false;
             }
-        }
-
-        // check against the lower range
-        boolean isGreaterOrEqual;
-        if (lowerRange == null) {
-            isGreaterOrEqual = true; // no lower range means any price is valid
         } else {
-            isGreaterOrEqual = (price >= lowerRange); // check if price is greater than or equal to lowerRange
+            System.out.println("Invalid range input: " + priceRangeInput);
+            return false; // invalid format
         }
-
-        // check against the upper range
-        boolean isLessOrEqual;
-        if (upperRange == null) {
-            isLessOrEqual = true; // no upper range means any price is valid
-        } else {
-            isLessOrEqual = (price <= upperRange); // check if price is less than or equal to upperRange
-        }
-
-        boolean isPriceInRange = isGreaterOrEqual && isLessOrEqual;
-
-        // return the final result
-        return isPriceInRange;
+    
+        // debug output to confirm parsed ranges
+        System.out.println("Price: " + price + ", Lower range: " + lowerRange + ", Upper range: " + upperRange);
+    
+        // check against the lower and upper range
+        boolean isGreaterOrEqual = (lowerRange == null || price >= lowerRange);
+        boolean isLessOrEqual = (upperRange == null || price <= upperRange);
+    
+        // debug the range checks
+        System.out.println("isGreaterOrEqual: " + isGreaterOrEqual + ", isLessOrEqual: " + isLessOrEqual);
+    
+        // only return true if both conditions are met
+        return isGreaterOrEqual && isLessOrEqual;
     }
+    
+    
+    
+
+
 }
-
-

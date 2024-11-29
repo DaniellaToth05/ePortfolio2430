@@ -1181,16 +1181,15 @@ public class ePortfolioGUI extends JFrame {
         return resultsPanel;
     }
 
-    
     /**
-     * method to handle the search action when the search button is clicked using the searchForInvestment method from my Portfolio class
+     * method to handle the search action when the search button is clicked using the searchForInvestment method from my portfolio class
      * @param symbolField symbol field
      * @param keywordsField keywords field
      * @param lowPriceField low price field
      * @param highPriceField high price field
      */
     private void searchInvestmentsAction(JTextField symbolField, JTextField keywordsField, JTextField lowPriceField, JTextField highPriceField) {
-        
+
         // variables to hold the inputs from the fields
         String symbolInput;
         String keywordsInput;
@@ -1198,41 +1197,73 @@ public class ePortfolioGUI extends JFrame {
         String lowPrice;
         String highPrice;
 
-        searchMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
-    
+        searchMessageArea.setText(""); // clear the message area before displaying new messages
+
         symbolInput = symbolField.getText().trim(); // get the symbol from the field
         keywordsInput = keywordsField.getText().trim(); // get the keywords from the field
         priceRangeInput = ""; // initialize the price range input to an empty string
-    
+
         lowPrice = lowPriceField.getText().trim(); // get the low price from the field
         highPrice = highPriceField.getText().trim(); // get the high price from the field
-    
+
+        // debugging
+        System.out.println("Low price input: " + lowPrice);
+        System.out.println("High price input: " + highPrice);
+
         // if the low price or high price is not empty, set the price range input to the low price and high price separated by a hyphen
         if (!lowPrice.isEmpty() || !highPrice.isEmpty()) {
             priceRangeInput = lowPrice + "-" + highPrice;
+            System.out.println("Constructed price range input: " + priceRangeInput); // debugging
+
         }
-        
-        // try catch block to handle the search action and display the search results
+
+        // validate the price range input
+        if (!lowPrice.isEmpty() || !highPrice.isEmpty()) {
+            try {
+                Double lowerRange = null;
+                Double upperRange = null;
+
+                if (!lowPrice.isEmpty()) {
+                    lowerRange = Double.valueOf(lowPrice); // convert low price to a double
+                }
+                if (!highPrice.isEmpty()) {
+                    upperRange = Double.valueOf(highPrice); // convert high price to a double
+                }
+
+                if (lowerRange != null && upperRange != null) {
+                    if (lowerRange > upperRange) {
+                        // display error if lower range is higher than upper range
+                        searchMessageArea.append("Oops, lower price range cannot be higher than upper price range!\n");
+                        return;
+                    }
+                }
+            } 
+            catch (NumberFormatException e) {
+                // display error if price inputs are not valid numbers
+                searchMessageArea.append("Sorry, please enter valid numeric values for price ranges.\n");
+                return;
+            }
+        }
+
+        // perform the search in the portfolio
         try {
-            String results; // variable to hold the search results
-            results = portfolio.searchForInvestment(symbolInput, keywordsInput, priceRangeInput); // search for the investment based on the inputs
-    
-            // if the results are empty, display a message saying no investments match the search
+            String results = portfolio.searchForInvestment(symbolInput, keywordsInput, priceRangeInput); // search for investments
+
             if (results.isEmpty()) {
+                // display message if no investments match the search criteria
                 searchMessageArea.append("Sorry, no investments match your search.\n");
             } 
-            // otherwise display the search results
             else {
+                // display the search results
                 searchMessageArea.append(results);
             }
         } 
-        // catch any exceptions that could happen
         catch (Exception ex) {
-            searchMessageArea.append("Oops, was unable to process your search. Please double check your inputs or try again!\n");
+            // catch and display any unexpected errors
+            searchMessageArea.append("Oops, unable to process your search. please double-check your inputs and try again.\n");
         }
     }
-    
-    
+
     /**
      * method to create the menu bar for the GUI holding all of the commands
      * @return the menu bar with the commands
