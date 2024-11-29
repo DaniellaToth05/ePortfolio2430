@@ -165,15 +165,19 @@ public class Portfolio {
         // check if there are investments in the portfolio
         if (investments != null && !investments.isEmpty()) {
             System.out.println("Updating Investment Prices: ");
+
+            // loop through the investments and update the price for each one
             for (int i = 0; i < investments.size(); i++) {
                 Investment investment = investments.get(i); // get the investment
                 System.out.print("Enter new price for " + investment.getSymbol().toUpperCase() + ": $");
                 double newPrice = scan.nextDouble(); // get the new price from the user
                 scan.nextLine(); // consume the newline character
 
+                // check if the price is negative
                 if (newPrice < 0) {
                     System.out.println("\nOops, price cannot be negative.");
                 } 
+                // otherwise, update the price
                 else {
                     investment.setPrice(newPrice); // update the price
                     System.out.println("Price updated for " + investment.getSymbol().toUpperCase());

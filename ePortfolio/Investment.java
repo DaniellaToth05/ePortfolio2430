@@ -87,9 +87,9 @@ public abstract class Investment {
      */
     public void setPrice(double price) {
         this.price = price; // set the new price
-        if(!isFromFile){
-            setBookValue(price);
-        }
+        // if(!isFromFile){
+        //     setBookValue(price);
+        // }
     }
 
     /**

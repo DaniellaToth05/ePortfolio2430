@@ -101,7 +101,9 @@ public class MutualFund extends Investment{
      */
     @Override
     public double calculateGain(){
-        return (getQuantity() * getPrice()) - (bookValue + redemptionFee) ; // // gain = (current value - book value)
+        double gain;
+        gain = (getQuantity() * getPrice()) - (bookValue - redemptionFee); // gain = (current value - book value)
+        return gain;
     }
 
     /**

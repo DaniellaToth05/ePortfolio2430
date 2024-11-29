@@ -844,6 +844,7 @@ public class ePortfolioGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateInvestmentAction(updatePriceField, index); // call the updateInvestmentAction method
+                updateGainPanel(totalGainField, individualGainsArea); // update the gain panel after the price update
             }
         });
 
@@ -908,8 +909,11 @@ public class ePortfolioGUI extends JFrame {
                 updateMessageArea.append("Oops, price must be greater than zero!\n");
                 return;
             }
-            portfolio.getInvestments().get(investmentIndex).setPrice(newPrice); // set the new price of the investment
+            Investment investment = portfolio.getInvestments().get(investmentIndex); // get the investment from the portfolio
+            investment.setPrice(newPrice); // set the new price of the investment
+
             updateGainPanel(totalGainField, individualGainsArea); // update the gain panel after the price update
+            
             updateMessageArea.append("Price updated successfully to $" + String.format("%.2f", newPrice) + ".\n"); // display the success message with the new price
         }
         // catch the exception if the user enters an invalid value for the price
