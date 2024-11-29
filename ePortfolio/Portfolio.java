@@ -228,7 +228,7 @@ public class Portfolio {
         // filter the matched investments based on the symbol 
         if(!symbolInput.isEmpty()){
             // loop through the matched investments and remove the ones that don't match the symbol
-            for(int i = matchedInvestments.size() -1; i >=0; i--){
+            for(int i = matchedInvestments.size() -1; i >= 0; i--){
                 Investment investment = matchedInvestments.get(i);
                 if(!investment.getSymbol().equalsIgnoreCase(symbolInput)){
                     matchedInvestments.remove(i);

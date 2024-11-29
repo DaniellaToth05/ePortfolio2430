@@ -7,10 +7,13 @@
  * Run Command: java DiscussionBoardGUI
  */
 
+// import the files needed for the GUI
 import ePortfolio.Investment;
 import ePortfolio.Stock;
 import ePortfolio.MutualFund;
 import ePortfolio.Portfolio;
+
+// import the swing components and other necessary components
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -840,7 +843,7 @@ public class ePortfolioGUI extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleUpdateAction(updatePriceField, index);
+                updateInvestmentAction(updatePriceField, index); // call the updateInvestmentAction method
             }
         });
 
@@ -893,7 +896,7 @@ public class ePortfolioGUI extends JFrame {
      * @param updatePriceField input field for the price
      * @param investmentIndex index of the investment in the portfolio
      */
-    private void handleUpdateAction(JTextField updatePriceField, int investmentIndex) {
+    private void updateInvestmentAction(JTextField updatePriceField, int investmentIndex) {
 
         updateMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
     
@@ -913,7 +916,7 @@ public class ePortfolioGUI extends JFrame {
         catch (NumberFormatException ex) {
             updateMessageArea.append("Sorry, please enter a valid price.\n");
         } 
-        // catch the exception if the user enters an index that is out of range
+        // catch the exception if the user enters an index that is out of range, should never reach this as the index is checked before
         catch (IndexOutOfBoundsException ex) {
             updateMessageArea.append("Oops, unable to update investment - index out of range!\n");
         }
@@ -1004,7 +1007,7 @@ public class ePortfolioGUI extends JFrame {
             unrealizedGain = unrealizedGain + gain; // add to the total unrealized gain
 
             // add the investment details and gain to the text area
-            individualGainsText += investment.toString() + " | Gain: " + String.format("%.2f", gain) + "\n";
+            individualGainsText = individualGainsText + investment.toString() + " | Gain: " + String.format("%.2f", gain) + "\n";
         }
 
         double totalGain = realizedGain + unrealizedGain; // calculate the total gain
@@ -1128,7 +1131,7 @@ public class ePortfolioGUI extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleSearchAction(symbolField, keywordsField, lowPriceField, highPriceField);
+                searchInvestmentsAction(symbolField, keywordsField, lowPriceField, highPriceField); // call the searchInvestmentsAction method
             }
         });
     
@@ -1184,7 +1187,7 @@ public class ePortfolioGUI extends JFrame {
      * @param lowPriceField low price field
      * @param highPriceField high price field
      */
-    private void handleSearchAction(JTextField symbolField, JTextField keywordsField, JTextField lowPriceField, JTextField highPriceField) {
+    private void searchInvestmentsAction(JTextField symbolField, JTextField keywordsField, JTextField lowPriceField, JTextField highPriceField) {
         
         // variables to hold the inputs from the fields
         String symbolInput;
@@ -1252,14 +1255,14 @@ public class ePortfolioGUI extends JFrame {
         buyItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel, "BUY");
+                cardLayout.show(panel, "BUY"); // show the buy panel
             }
         });
         // action listener for the sell item to switch to the sell panel
         sellItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel, "SELL");
+                cardLayout.show(panel, "SELL"); // show the sell panel
             }
         });
         // action listener for the update item to switch to the update panel
@@ -1277,7 +1280,7 @@ public class ePortfolioGUI extends JFrame {
                 else {
                     index = 0; // start with the first investment
                     updateUpdatePanel(); // refresh the update panel with the current investment
-                    cardLayout.show(panel, "UPDATE");
+                    cardLayout.show(panel, "UPDATE"); // show the update panel
                 }
                 
             }
@@ -1287,7 +1290,7 @@ public class ePortfolioGUI extends JFrame {
         searchItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel, "SEARCH");
+                cardLayout.show(panel, "SEARCH"); // show the search panel
             }
         });
         
@@ -1295,7 +1298,7 @@ public class ePortfolioGUI extends JFrame {
         quitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                System.exit(0); // exit the program
             }
         });
         // the gain action listener is a bit different as it needs to update the gain panel with the latest portfolio data when the menu item is clicked instead of a button
