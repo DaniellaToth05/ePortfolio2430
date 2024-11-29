@@ -276,7 +276,7 @@ public class ePortfolioGUI extends JFrame {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleBuyAction(typeComboBox, buySymbolField, buyNameField, buyQuantityField, buyPriceField);
+                buyInvestmentAction(typeComboBox, buySymbolField, buyNameField, buyQuantityField, buyPriceField);
             }
         });
 
@@ -343,9 +343,9 @@ public class ePortfolioGUI extends JFrame {
      * @param buyQuantityField text field for entering the quantity of the investment
      * @param buyPriceField text field for entering the price of the investment
      */
-    private void handleBuyAction(JComboBox<String> typeComboBox, JTextField buySymbolField, JTextField buyNameField, JTextField buyQuantityField, JTextField buyPriceField) {
+    private void buyInvestmentAction(JComboBox<String> typeComboBox, JTextField buySymbolField, JTextField buyNameField, JTextField buyQuantityField, JTextField buyPriceField) {
         try {
-            System.out.println("handleBuyAction triggered"); // debugging print statement
+            //System.out.println("buyInvestmentAction started"); // debugging print statement
     
             // get the input values from the fields like the type of investment, symbol, name, quantity, and price
             String type = (String) typeComboBox.getSelectedItem();
@@ -356,7 +356,7 @@ public class ePortfolioGUI extends JFrame {
     
             // if the user leaves the symbol field empty, display an error message
             if (symbol.isEmpty()) {
-                System.out.println("Symbol is empty");
+                //System.out.println("symbol was empty"); // debug print statement
                 buyMessageArea.append("Sorry, investment symbol cannot be empty.\n");
                 return;
             }
@@ -374,14 +374,13 @@ public class ePortfolioGUI extends JFrame {
     
             // if the symbol already exists in the portfolio, display an error message
             if (inPortfolio) {
-                System.out.println("Symbol already exists in the portfolio");
                 buyMessageArea.append("Sorry, this symbol already exists in your portfolio! Please choose a different symbol.\n");
                 return;
             }
     
             // if the user leaves the name field empty, display an error message
             if (name.isEmpty()) {
-                System.out.println("Name is empty");
+                //System.out.println("name is empty"); // debug print statement
                 buyMessageArea.append("Sorry, investment name cannot be empty.\n");
                 return;
             }
@@ -392,13 +391,11 @@ public class ePortfolioGUI extends JFrame {
                 quantity = Integer.valueOf(buyQuantityField.getText().trim()); // get the quantity from the field
                 // if the quantity is less than or equal to 0, display an error message
                 if (quantity <= 0) {
-                    System.out.println("Invalid quantity: " + quantity);
                     buyMessageArea.append("Oops, you can't purchase " + quantity + " units!\n");
                     return;
                 }
             } 
             catch (NumberFormatException ex) { // catch the exception if the user enters a non-integer value
-                System.out.println("Quantity is not a valid number");
                 buyMessageArea.append("Sorry, please enter a valid quantity.\n");
                 return;
             }
@@ -409,13 +406,11 @@ public class ePortfolioGUI extends JFrame {
                 price = Double.valueOf(buyPriceField.getText().trim());
                 // if the price is less than 0, display an error message
                 if (price < 0) {
-                    System.out.println("Invalid price: " + price);
                     buyMessageArea.append("Oops, you can't purchase units for $" + price + "!\n");
                     return;
                 }
             } 
             catch (NumberFormatException ex) {
-                System.out.println("Price is not a valid number");
                 buyMessageArea.append("Sorry, please enter a valid price.\n");
                 return;
             }
@@ -429,31 +424,30 @@ public class ePortfolioGUI extends JFrame {
             else if (type.equalsIgnoreCase("Mutual Fund")) {
                 investment = new MutualFund(symbol, name, quantity, price, false);
             }
-            // otherwise its an invalid choice, so display an error message 
+            // otherwise its an invalid choice, so display an error message, although this should never be triggered as the combo box only has two options
             else {
-                System.out.println("Invalid investment type");
                 buyMessageArea.append("Invalid choice, please try again.\n");
                 return;
             }
     
             investment.setBookValue(price); // set the book value of the investment
-            System.out.println("Book value set for investment");
+            //System.out.println("Book value set for investment"); // debugging print statement
     
             portfolio.buyInvestment(investment); // buy the investment and add it to the portfolio
-            System.out.println("Portfolio size after buying: " + portfolio.getInvestments().size());
+            //System.out.println("Portfolio size after buying: " + portfolio.getInvestments().size()); // debugging print statement
             updateGainPanel(totalGainField, individualGainsArea); // update the gain panel with the new investment
 
 
             // loop through the investments in the portfolio to get the index of the new investment
             index = portfolio.getInvestments().size() - 1;
             for (int i = 0; i < portfolio.getInvestments().size(); i++) {
+                // if the current investment symbol is the same as the new investment symbol
                 if (i == portfolio.getInvestments().size() - 1) {
-                    index = i;
+                    index = i; // set the index to the last investment in the portfolio
                 }
             }
             
-            
-            System.out.println("Index after buying: " + index); // debugging statement
+            //System.out.println("Index after buying: " + index); // debugging statement
 
             buyMessageArea.append("Investment added successfully!\n"); // display the success message when the investment is added
     
@@ -463,8 +457,6 @@ public class ePortfolioGUI extends JFrame {
     
         } 
         catch (Exception ex) { // catch any other exceptions that could happen
-            System.out.println("Sorry, an unexpected exception occurred: " + ex.getMessage());
-            ex.printStackTrace(); // debug print the stack trace
             buyMessageArea.append("Sorry, an unexpected error occurred. Please try again.\n");
         }
     }
@@ -564,7 +556,7 @@ public class ePortfolioGUI extends JFrame {
         sellButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleSellAction(sellSymbolField, sellQuantityField, sellPriceField);
+                sellInvestmentAction(sellSymbolField, sellQuantityField, sellPriceField); // call the sellInvestmentAction method
             }
         });
         
@@ -625,7 +617,7 @@ public class ePortfolioGUI extends JFrame {
      * @param quantityField input field for the quantity
      * @param priceField input field for the price
      */
-    private void handleSellAction(JTextField symbolField, JTextField quantityField, JTextField priceField) {
+    private void sellInvestmentAction(JTextField symbolField, JTextField quantityField, JTextField priceField) {
         
         sellMessageArea.setText(""); // clear the message area before displaying new messages so that it is not cluttered
     
@@ -692,16 +684,16 @@ public class ePortfolioGUI extends JFrame {
     private void updateUpdatePanel() {
 
         // debugging print statements
-        System.out.println("Portfolio size in updateUpdatePanel: " + portfolio.getInvestments().size());
-        System.out.println("Index: " + index);
+        //System.out.println("the portfolio size in updateUpdatePanel: " + portfolio.getInvestments().size());
+        //System.out.println("Index: " + index);
 
-        // loop through the investments in the portfolio and print them to debug    
-        for(int i = 0; i < portfolio.getInvestments().size(); i++) {
-            System.out.println(portfolio.getInvestments().get(i));
-        }
+        // debugging loop through the investments in the portfolio and print them to debug    
+        // for(int i = 0; i < portfolio.getInvestments().size(); i++) {
+        //     System.out.println(portfolio.getInvestments().get(i));
+        // }
 
         if (portfolio.getInvestments().isEmpty()) {
-            System.out.println("Portfolio is empty in updateUpdatePanel.");
+            //System.out.println("Portfolio is empty in updateUpdatePanel.");
             updateSymbolField.setText("");
             updateNameField.setText("");
             updatePriceField.setText("");
@@ -710,9 +702,9 @@ public class ePortfolioGUI extends JFrame {
             nextButton.setEnabled(false);
         } 
         else {
-            System.out.println("Portfolio is not empty. Size: " + portfolio.getInvestments().size());
+            // System.out.println("Portfolio is not empty. Size: " + portfolio.getInvestments().size()); // debugging print statement 
             Investment current = portfolio.getInvestments().get(index);
-            System.out.println("Displaying investment: " + current);
+            // System.out.println("Displaying investment: " + current); // debugging print statement
             updateSymbolField.setText(current.getSymbol());
             updateNameField.setText(current.getName());
             updatePriceField.setText(String.valueOf(current.getPrice()));
