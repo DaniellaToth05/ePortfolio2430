@@ -47,16 +47,21 @@ public abstract class Investment {
      */
     public abstract void buy(int quantity, double price);
 
+    /**
+     * method to compare two investments
+     * @param other the other investment to compare
+     * @return true if the investments are equal, false otherwise, 
+     */
     public boolean equals(Object other){
-        if(this == other){
-            return true;
-        }
         if(other == null){
             return false;
         }
+        if(this == other){
+            return true;
+        }
 
         Investment otherInvestment = (Investment) other;
-        return this.symbol.equals(otherInvestment.getSymbol()) && this.name.equals(otherInvestment.getName()) && this.quantity == otherInvestment.getQuantity() && this.quantity == otherInvestment.getQuantity() && this.price == otherInvestment.getPrice(); 
+        return this.symbol.equals(otherInvestment.getSymbol()) && this.name.equals(otherInvestment.getName()) && this.quantity == otherInvestment.getQuantity() && this.price == otherInvestment.getPrice(); 
     }
 
     /**
