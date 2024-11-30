@@ -1,14 +1,6 @@
 package ePortfolio;
 
 
- /* 
- * Name: Daniella Toth
- * Student ID: 1261398
- * Compile Command: javac DiscussionBoard.java User.java Post.java DiscussionBoardGUI.java
- * Run Command: java DiscussionBoardGUI
- */
-
-
 // import the swing components and other necessary components
 import javax.swing.*;
 import java.awt.*;
