@@ -47,7 +47,17 @@ public abstract class Investment {
      */
     public abstract void buy(int quantity, double price);
 
+    public boolean equals(Object other){
+        if(this == other){
+            return true;
+        }
+        if(other == null){
+            return false;
+        }
 
+        Investment otherInvestment = (Investment) other;
+        return this.symbol.equals(otherInvestment.getSymbol()) && this.name.equals(otherInvestment.getName()) && this.quantity == otherInvestment.getQuantity() && this.quantity == otherInvestment.getQuantity() && this.price == otherInvestment.getPrice(); 
+    }
 
     /**
      * method to get the symbol of the investment
