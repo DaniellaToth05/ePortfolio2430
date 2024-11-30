@@ -1,3 +1,4 @@
+package ePortfolio;
 
 
  /* 
@@ -7,11 +8,6 @@
  * Run Command: java DiscussionBoardGUI
  */
 
-// import the files needed for the GUI
-import ePortfolio.Investment;
-import ePortfolio.Stock;
-import ePortfolio.MutualFund;
-import ePortfolio.Portfolio;
 
 // import the swing components and other necessary components
 import javax.swing.*;
