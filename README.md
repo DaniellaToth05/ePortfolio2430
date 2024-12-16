@@ -38,6 +38,6 @@
 
 ## Author
 
-**Daniella Toth]**  
+**Daniella Toth**  
 *Software Engineering Student at University of Guelph*  
 
