@@ -36,6 +36,45 @@
 
 ---
 
+## How to Run the Project
+If you'd like to see this project in action, please follow the steps below to run it locally on your machine:
+
+### 1. **Clone the Repository**
+First, clone the repository with: 
+
+```git clone https://github.com/DaniellaToth05/ePortfolio2430.git```
+
+Then, navigate into the project directory:
+```cd ePortfolio2430/react-frontend```
+
+### 2. **Install Dependencies**
+Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed. Then, install the required dependencies with
+```npm install```
+
+### 3. **Run the Project**
+Start the development server with the following command:
+```bash npm run dev```
+
+### 4. **View the Project**
+Once the server is running, open your browser and go to
+
+```http://localhost:5173```
+
+You should see the **ePortfolio** dashboard, which allows you to interact with the project’s functionalities.
+
+### 5. **Stop the Server**
+When you're finished, stop the development server by pressing
+```Ctrl + C```
+
+### Additional Notes
+
+- **Dependencies:** The project uses React and Vite for the frontend.
+- **Original Project:** This project was originally implemented with a Java Swing GUI and has been modernized with React for a more polished and user-friendly interface.
+
+Thank you for taking the time to view my project!
+
+---
+
 ## Author
 
 **Daniella Toth**  
