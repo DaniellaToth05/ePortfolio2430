@@ -1,0 +1,30 @@
+/* src/components/Header.css */
+
+@font-face {
+    font-family: 'The Seasons';
+    src: url('../../assets/fonts/TheSeasons.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  .header {
+    background-color: #f3f2ee; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  .header-logo {
+    height: 50px;
+    margin-right: 20px;
+  }
+  
+  .header-title {
+    font-family: 'The Seasons', serif !important;
+    font-size: 2.5rem;
+    font-weight: normal;
+    color: black;
+  }
+  
