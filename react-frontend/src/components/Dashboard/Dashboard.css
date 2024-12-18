@@ -1,51 +1,73 @@
 /* src/components/Dashboard.css */
 
+@font-face {
+  font-family: 'Baskerville';
+  src: url('../../assets/fonts/LibreBaskerville-Regular.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .dashboard {
     padding: 20px;
     background-color: #fff;
-    text-align: center;
+    text-align: left;
     font-family: Arial, sans-serif;
   }
   
-  /* Greeting Section */
+  /* greeting Section */
   .greeting-section {
     margin-bottom: 20px;
   }
+
+  .Greeting-line {
+    width: 92%;            /* Full width */
+    height: 0.17vw;            /* Line thickness */
+    background-color: #9c9c9c; /* Line color */
+    margin-left: 4vw;
+    margin-top: -1.7vw;
+  }
   
   .greeting {
-    font-size: 2rem;
+    font-size: 2vw;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 2vw 5vw;
   }
   
   .agenda {
-    font-size: 1.2rem;
-    color: #555;
+    font-size: 1.6vw;
+    margin-left: 5vw;
+    margin-top: 0.7vw;
+    font-weight: 100;
+    color: #000000;
   }
   
   /* Button Section */
   .button-section {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 1vw;
     margin-bottom: 30px;
+    margin-left:1vw;
   }
   
   .dashboard-button {
-    padding: 12px 20px;
-    font-size: 1rem;
-    background-color: #f3f2ee;
+    width: 13.5vw;
+    height: 2.7vw;
+    font-size: 1.05vw;
+    background-color: #e7e7e7;
     border: none;
-    color: #555;
+    color: #c2b261;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-radius: 0.2vw;
+    font-weight: bold;
   }
   
   .dashboard-button:hover {
-    background-color: #d9d7d2;
+    background-color: rgba(209, 209, 209, 0.757)
   }
   
-  /* Portfolio Summary */
+  /* portfolio Summary */
   .portfolio-summary {
     background-color: #f9f9f9;
     padding: 20px;
@@ -76,7 +98,7 @@
     margin: 5px 0;
   }
   
-  /* Image Section */
+  /* image Section */
   .dashboard-image img {
     max-width: 100%;
     height: auto;

@@ -7,6 +7,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="greeting-section">
         <h2 className="greeting">Good Afternoon, Daniella</h2>
+        <div className="Greeting-line"></div>
         <p className="agenda">What’s on your investment agenda today?</p>
       </div>
 
@@ -16,6 +17,7 @@ const Dashboard = () => {
         <button className="dashboard-button">Update Prices</button>
         <button className="dashboard-button">View Gain</button>
         <button className="dashboard-button">Search Portfolio</button>
+        <button className="dashboard-button">Set A Goal</button>
       </div>
 
       <div className="portfolio-summary">

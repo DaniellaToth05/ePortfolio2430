@@ -1,30 +1,27 @@
 /* src/components/Header.css */
 
-@font-face {
-    font-family: 'The Seasons';
-    src: url('../../assets/fonts/TheSeasons.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  
   .header {
     background-color: #e7e7e7; 
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: space-between;
+    padding: 2px;
     border-bottom: 2px solid #ccc;
+    position: relative;
+    border: none;
   }
-  
+
   .header-logo {
-    height: 50px;
-    margin-right: 20px;
+    height: 5vw;
+    margin-left: 2vw;
   }
   
   .header-title {
-    font-family: 'The Seasons', serif !important;
-    font-size: 2.5rem;
+    font-size: 2vw;
     font-weight: normal;
-    color: black;
+    color: #000;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
   
