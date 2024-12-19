@@ -15,6 +15,10 @@
     height: 5vw;
     margin-left: 2vw;
   }
+
+  .header-logo:hover{
+    cursor: pointer;
+  }
   
   .header-title {
     font-size: 2vw;

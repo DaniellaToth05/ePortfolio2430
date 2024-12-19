@@ -1,15 +1,18 @@
-import React from 'react'
-import Dashboard from './components/Dashboard/Dashboard'
+// src/App.jsx
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Dashboard from './components/Dashboard/Dashboard';
 import Header from './components/Header/Header';
 
 function App() {
-  
-  return(
-    <div>
-      <Header/>
-      <Dashboard/>
-    </div>
+  return (
+    <Router>
+      <>
+        <Header />
+        <Dashboard />
+      </>
+    </Router>
   );
 }
 
-export default App
+export default App;
