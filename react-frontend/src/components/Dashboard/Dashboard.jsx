@@ -1,8 +1,15 @@
-// src/components/Dashboard.jsx
+// src/components/Dashboard/Dashboard.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleAddInvestmentClick = () => {
+    navigate('/add-investment');
+  };
+
   return (
     <div className="dashboard">
       <div className="greeting-section">
@@ -12,7 +19,9 @@ const Dashboard = () => {
       </div>
 
       <div className="button-section">
-        <button className="dashboard-button">Add Investment</button>
+        <button className="dashboard-button" onClick={handleAddInvestmentClick}>
+          Add Investment
+        </button>
         <button className="dashboard-button">Sell Investment</button>
         <button className="dashboard-button">Update Prices</button>
         <button className="dashboard-button">View Gain</button>
@@ -21,7 +30,7 @@ const Dashboard = () => {
       </div>
 
       <div className="portfolio-summary">
-      <div className="vertical-line"></div>
+        <div className="vertical-line"></div>
         <h3>Your Portfolio Summary:</h3>
         <div className="summary-details">
           <div className="detail">

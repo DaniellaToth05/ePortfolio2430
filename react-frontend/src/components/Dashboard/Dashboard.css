@@ -21,6 +21,7 @@
   /* greeting Section */
   .greeting-section {
     margin-bottom: 20px;
+    animation: fadeInSlideUp 0.6s ease-out;
   }
 
   .Greeting-line {
@@ -52,6 +53,7 @@
     gap: 1vw;
     margin-bottom: 30px;
     margin-left:6vw;
+    animation: fadeInSlideUp 0.6s ease-out;
   }
   
   .dashboard-button {
@@ -84,6 +86,7 @@
     position: relative;
     z-index: 1;
     border: none;
+    animation: fadeInSlideUp 0.6s ease-out;
   }
   
   .portfolio-summary h3 {
@@ -139,6 +142,7 @@
     margin-top: 21.5vw;
     position: absolute;
     z-index: 1;
+    animation: fadeInSlideUp 0.6s ease-out;
   }
   .dashboard-image img {
     max-width: 50vw;
