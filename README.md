@@ -8,6 +8,9 @@
 
 ---
 
+![Home Sample](static/images/home-sample.png)
+---
+
 ## Features
 
 - **Buy Investments**: Add stocks or mutual funds to your portfolio.
