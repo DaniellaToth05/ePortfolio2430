@@ -8,7 +8,7 @@
 
 ---
 
-![Home Sample](static/images/home-sample.png)
+![Home Sample](react-frontend/src/assets/images/homepage.png)
 ---
 
 ## Features
