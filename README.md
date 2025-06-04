@@ -32,7 +32,6 @@
 
 ## Future Enhancements
 
-- **Full-Stack Integration**: Connect React frontend with Java backend via REST APIs.
 - **Authentication**: Add user login and registration.
 - **Persistent Storage**: Integrate a database for saving portfolio data.
 - **Real-Time Updates**: Fetch live market data.
