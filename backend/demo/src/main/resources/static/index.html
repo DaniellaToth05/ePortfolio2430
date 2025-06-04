@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePortfolio - Investment Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">ePortfolio</div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Dashboard</a>
+                    <a href="#" class="nav-link">Portfolio</a>
+                    <a href="#" class="nav-link">Analytics</a>
+                    <a href="#" class="nav-link">Goals</a>
+                    <a href="#" class="nav-link">Insights</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="greeting">Good Afternoon, Daniella</div>
+                        <h1>Your Investments, Simplified.</h1>
+                        <p class="subtitle">Stay on top of your portfolio — down to the last dollar.</p>
+                    </div>
+
+                    <div class="portfolio-card">
+                        <div class="portfolio-summary">
+                            <h2>Portfolio Overview</h2>
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <h3>Total Portfolio Value</h3>
+                                    <div class="value large">$15,000</div>
+                                </div>
+                                <div class="summary-item">
+                                    <h3>Active Holdings</h3>
+                                    <div class="value">8</div>
+                                </div>
+                                <div class="summary-item">
+                                    <h3>Liquid Assets</h3>
+                                    <div class="value">$1,500</div>
+                                </div>
+                                <div class="summary-item">
+                                    <h3>Equity Ratio</h3>
+                                    <div class="value">70%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="top-investments">
+                            <div class="investments-header">Top Performers</div>
+                            <div class="investment-item">
+                                <span class="investment-symbol">AAPL</span>
+                                <span class="investment-gain">+15%</span>
+                            </div>
+                            <div class="investment-item">
+                                <span class="investment-symbol">TSLA</span>
+                                <span class="investment-gain">+12%</span>
+                            </div>
+                            <div class="investment-item">
+                                <span class="investment-symbol">AMZN</span>
+                                <span class="investment-gain">+10%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-element leaf-1"></div>
+            <div class="floating-element leaf-2"></div>
+            <div class="floating-element sage-accent"></div>
+        </section>
+
+        <section class="container">
+            <div class="action-section">
+                <div class="action-header">
+                    <h2 class="action-title">Portfolio Dashboard</h2>
+                    <p class="action-subtitle">Track performance, update values, and manage assets with ease.</p>
+                </div>
+                <div class="action-grid">
+                    <a href="#" class="action-btn">
+                        <div class="action-icon">+</div>
+                        <div>Add Investment</div>
+                    </a>
+                    <a href="#" class="action-btn">
+                        <div class="action-icon">−</div>
+                        <div>Sell Investment</div>
+                    </a>
+                    <a href="#" class="action-btn">
+                        <div class="action-icon">↗</div>
+                        <div>Update Prices</div>
+                    </a>
+                    <a href="#" class="action-btn">
+                        <div class="action-icon">
+                          <img src="analytics.png" alt="Analytics Icon" class="icon-img">
+                        </div>
+                        <div>Performance Analytics</div>
+                      </a>
+                      <a href="#" class="action-btn">
+                        <div class="action-icon">
+                          <img src="search.png" alt="Search Icon" class="icon-img">
+                        </div>
+                        <div>Portfolio Search</div>
+                      </a>
+                      
+                </div>
+            </div>
+
+            <div class="goals-section">
+                <h2 class="goals-title">Investment Objectives (placeholders for now) </h2>
+                <div class="goals-grid">
+                    <div class="goal-item">
+                        <div class="goal-name">Education Endowment</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <div class="progress-text">75% Complete • $37,500 of $50,000</div>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="goal-name">Retirement Legacy</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                            <div class="progress-text">88% Complete • $440,000 of $500,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Form -->
+  <div id="buyStockModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Buy Stock</h2>
+      <form id="buyForm">
+        <label for="symbol">Symbol:</label>
+        <input type="text" id="symbol" name="symbol" required>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+        <button type="submit">Submit</button>
+        <p id="responseMessage"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS at the bottom -->
+  <script>
+    // Refined interactions with Aritzia-style subtlety
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', function () {
+        this.style.transform = 'translateY(-6px) scale(1.01)';
+        this.style.transition = 'all 0.3s ease';
+      });
+      btn.addEventListener('mouseleave', function () {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+      btn.addEventListener('mousedown', function () {
+        this.style.transform = 'translateY(-4px) scale(0.99)';
+      });
+      btn.addEventListener('mouseup', function () {
+        this.style.transform = 'translateY(-6px) scale(1.01)';
+      });
+    });
+
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -30px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const progressBars = entry.target.querySelectorAll('.progress-fill');
+          progressBars.forEach((bar, index) => {
+            bar.style.transition = 'width 2s ease';
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(() => {
+              bar.style.width = width;
+            }, 150 + (index * 250));
+          });
+        }
+      });
+    }, observerOptions);
+
+    const goalsSection = document.querySelector('.goals-section');
+    if (goalsSection) observer.observe(goalsSection);
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      document.querySelectorAll('.floating-element').forEach((element, index) => {
+        const speed = 0.2 + (index * 0.05);
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    });
+
+    document.querySelector('.portfolio-card').addEventListener('mouseenter', function () {
+      this.style.transform = 'translateY(-4px) scale(1.005)';
+    });
+
+    document.querySelector('.portfolio-card').addEventListener('mouseleave', function () {
+      this.style.transform = 'translateY(0) scale(1)';
+    });
+
+    // 🔧 Modal logic
+    const modal = document.getElementById("buyStockModal");
+    const openModalBtn = Array.from(document.querySelectorAll(".action-btn"))
+      .find(btn => btn.textContent.includes("Add Investment"));
+    const closeModalBtn = document.querySelector(".close-button");
+
+    openModalBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.style.display = "block";
+    });
+
+    closeModalBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    document.getElementById("buyForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const symbol = document.getElementById("symbol").value;
+      const name = document.getElementById("name").value;
+      const quantity = document.getElementById("quantity").value;
+      const price = document.getElementById("price").value;
+
+      try {
+        const response = await fetch("/api/buyStock", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ symbol, name, quantity, price })
+        });
+
+        const message = await response.text();
+        document.getElementById("responseMessage").textContent = message;
+        this.reset();
+        setTimeout(() => {
+          modal.style.display = "none";
+          document.getElementById("responseMessage").textContent = "";
+        }, 2000);
+      } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("responseMessage").textContent = "Error occurred. Please try again.";
+      }
+    });
+  </script>
+  
+</body>
+</html>
