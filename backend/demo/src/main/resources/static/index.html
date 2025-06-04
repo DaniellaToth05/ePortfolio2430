@@ -88,11 +88,11 @@
                     <p class="action-subtitle">Track performance, update values, and manage assets with ease.</p>
                 </div>
                 <div class="action-grid">
-                    <a href="#" class="action-btn">
+                    <a href="#" class="action-btn" onclick="openBuyModal()">
                         <div class="action-icon">+</div>
                         <div>Add Investment</div>
                     </a>
-                    <a href="#" class="action-btn">
+                    <a href="#" class="action-btn" onclick="openSellModal()">
                         <div class="action-icon">−</div>
                         <div>Sell Investment</div>
                     </a>
@@ -112,163 +112,96 @@
                         </div>
                         <div>Portfolio Search</div>
                       </a>
-                      
-                </div>
-            </div>
-
-            <div class="goals-section">
-                <h2 class="goals-title">Investment Objectives (placeholders for now) </h2>
-                <div class="goals-grid">
-                    <div class="goal-item">
-                        <div class="goal-name">Education</div>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 75%"></div>
-                            </div>
-                            <div class="progress-text">75% Complete • $37,500 of $50,000</div>
-                        </div>
-                    </div>
-                    <div class="goal-item">
-                        <div class="goal-name">Retirement</div>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 88%"></div>
-                            </div>
-                            <div class="progress-text">88% Complete • $440,000 of $500,000</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Modal Form -->
-  <div id="buyStockModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <h2>Buy Stock</h2>
-      <form id="buyForm">
-        <label for="symbol">Symbol:</label>
-        <input type="text" id="symbol" name="symbol" required>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" required>
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" step="0.01" required>
-        <button type="submit">Submit</button>
-        <p id="responseMessage"></p>
-      </form>
+    <!-- Buy Modal -->
+    <div class="modal-overlay" id="buyModalOverlay" style="display: none;">
+        <div class="modal">
+            <button class="close-btn" onclick="closeBuyModal()">×</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Acquire Investment</h2>
+                <p class="modal-subtitle">Add to Portfolio</p>
+            </div>
+            <form id="buyForm">
+                <div class="form-group">
+                    <label class="form-label" for="symbol">Symbol</label>
+                    <input type="text" id="symbol" class="form-input" placeholder="e.g., AAPL" maxlength="5" style="text-transform: uppercase;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="name">Company Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="e.g., Apple Inc.">
+                </div>
+                <div class="input-row">
+                    <div class="form-group">
+                        <label class="form-label" for="quantity">Quantity</label>
+                        <input type="number" id="quantity" class="form-input" placeholder="0" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="price">Price per Share</label>
+                        <div class="price-input-wrapper">
+                            <input type="number" id="price" class="form-input price-input" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" onclick="closeBuyModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Complete Purchase</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <!-- JS at the bottom -->
-  <script>
-    // Refined interactions with Aritzia-style subtlety
-    document.querySelectorAll('.action-btn').forEach(btn => {
-      btn.addEventListener('mouseenter', function () {
-        this.style.transform = 'translateY(-6px) scale(1.01)';
-        this.style.transition = 'all 0.3s ease';
-      });
-      btn.addEventListener('mouseleave', function () {
-        this.style.transform = 'translateY(0) scale(1)';
-      });
-      btn.addEventListener('mousedown', function () {
-        this.style.transform = 'translateY(-4px) scale(0.99)';
-      });
-      btn.addEventListener('mouseup', function () {
-        this.style.transform = 'translateY(-6px) scale(1.01)';
-      });
-    });
-
-    const observerOptions = {
-      threshold: 0.2,
-      rootMargin: '0px 0px -30px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const progressBars = entry.target.querySelectorAll('.progress-fill');
-          progressBars.forEach((bar, index) => {
-            bar.style.transition = 'width 2s ease';
-            const width = bar.style.width;
-            bar.style.width = '0%';
-            setTimeout(() => {
-              bar.style.width = width;
-            }, 150 + (index * 250));
-          });
+    <script>
+        function openBuyModal() {
+            document.getElementById('buyModalOverlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('symbol').focus(), 300);
         }
-      });
-    }, observerOptions);
 
-    const goalsSection = document.querySelector('.goals-section');
-    if (goalsSection) observer.observe(goalsSection);
+        function closeBuyModal() {
+            document.getElementById('buyModalOverlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      document.querySelectorAll('.floating-element').forEach((element, index) => {
-        const speed = 0.2 + (index * 0.05);
-        element.style.transform = `translateY(${scrolled * speed}px)`;
-      });
-    });
-
-    document.querySelector('.portfolio-card').addEventListener('mouseenter', function () {
-      this.style.transform = 'translateY(-4px) scale(1.005)';
-    });
-
-    document.querySelector('.portfolio-card').addEventListener('mouseleave', function () {
-      this.style.transform = 'translateY(0) scale(1)';
-    });
-
-    // 🔧 Modal logic
-    const modal = document.getElementById("buyStockModal");
-    const openModalBtn = Array.from(document.querySelectorAll(".action-btn"))
-      .find(btn => btn.textContent.includes("Add Investment"));
-    const closeModalBtn = document.querySelector(".close-button");
-
-    openModalBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      modal.style.display = "block";
-    });
-
-    closeModalBtn.addEventListener("click", () => {
-      modal.style.display = "none";
-    });
-
-    window.addEventListener("click", (event) => {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    });
-
-    document.getElementById("buyForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const symbol = document.getElementById("symbol").value;
-      const name = document.getElementById("name").value;
-      const quantity = document.getElementById("quantity").value;
-      const price = document.getElementById("price").value;
-
-      try {
-        const response = await fetch("/api/buyStock", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ symbol, name, quantity, price })
+        document.getElementById('buyModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeBuyModal();
         });
 
-        const message = await response.text();
-        document.getElementById("responseMessage").textContent = message;
-        this.reset();
-        setTimeout(() => {
-          modal.style.display = "none";
-          document.getElementById("responseMessage").textContent = "";
-        }, 2000);
-      } catch (error) {
-        console.error("Error:", error);
-        document.getElementById("responseMessage").textContent = "Error occurred. Please try again.";
-      }
-    });
-  </script>
-  
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeBuyModal();
+        });
+
+        document.getElementById('symbol').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        document.getElementById('buyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = {
+                symbol: document.getElementById('symbol').value,
+                name: document.getElementById('name').value,
+                quantity: document.getElementById('quantity').value,
+                price: document.getElementById('price').value
+            };
+
+            try {
+                const response = await fetch('/api/buyStock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error('Failed to submit');
+                alert(`Purchased ${formData.quantity} shares of ${formData.symbol}`);
+                closeBuyModal();
+                this.reset();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    </script>
 </body>
 </html>

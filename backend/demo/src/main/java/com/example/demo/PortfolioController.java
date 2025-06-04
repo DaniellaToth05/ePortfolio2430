@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // Allows frontend to connect (adjust for production)
+@CrossOrigin(origins = "*") 
 public class PortfolioController {
 
     private Portfolio portfolio = new Portfolio();
