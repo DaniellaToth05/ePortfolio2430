@@ -103,6 +103,6 @@ Thank you for taking the time to view my project!
 
 **Daniella Toth**  
 *Software Engineering Student at University of Guelph*  
-## Connect with Me
-[LinkedIn](https://www.linkedin.com/in/daniella-toth-x03/)
+**Connect with Me**
+*[LinkedIn](https://www.linkedin.com/in/daniella-toth-x03/)*
 
