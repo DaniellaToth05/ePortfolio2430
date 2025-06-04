@@ -21,4 +21,29 @@ public class PortfolioController {
         portfolio.buyInvestment(stock);
         return "Successfully bought " + stock.getQuantity() + " shares of " + stock.getSymbol();
     }
+
+    // POST request to sell a stock
+    @PostMapping("/sellStock")
+    public String sellStock(@RequestBody SellRequest sellRequest) {
+        double payment = portfolio.sellInvestment(
+            sellRequest.getSymbol(),
+            sellRequest.getQuantity(),
+            sellRequest.getPrice()
+        );
+        if (payment == -1) {
+            return "Sell failed. Investment not found.";
+        }
+        return "Successfully sold " + sellRequest.getQuantity() + " shares of " + sellRequest.getSymbol();
+    }
+
+
+    // GET request to search for a stock
+    @GetMapping("/searchInvestments")
+    public String searchInvestments(
+            @RequestParam(required = false, defaultValue = "") String symbol,
+            @RequestParam(required = false, defaultValue = "") String keywords,
+            @RequestParam(required = false, defaultValue = "") String priceRange) {
+
+        return portfolio.searchForInvestment(symbol.trim(), keywords.trim(), priceRange.trim());
+    }
 }
