@@ -118,139 +118,175 @@
     </main>
 
     <!-- Buy Modal -->
-  <div class="modal-overlay" id="buyModalOverlay" style="display: none;">
-    <div class="modal">
-      <button class="close-btn" onclick="closeBuyModal()">×</button>
-      <div class="modal-header">
-        <h2 class="modal-title">Acquire Investment</h2>
-        <p class="modal-subtitle">Add to Portfolio</p>
-      </div>
-      <form id="buyForm">
-        <div class="form-group">
-          <label class="form-label" for="buy-symbol">Symbol</label>
-          <input type="text" id="buy-symbol" class="form-input" placeholder="e.g., AAPL" maxlength="5" style="text-transform: uppercase;">
+    <div class="modal-overlay" id="buyModalOverlay" style="display: none;">
+        <div class="modal">
+        <button class="close-btn" onclick="closeBuyModal()">×</button>
+        <div class="modal-header">
+            <h2 class="modal-title">Acquire Investment</h2>
+            <p class="modal-subtitle">Add to Portfolio</p>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="buy-name">Company Name</label>
-          <input type="text" id="buy-name" class="form-input" placeholder="e.g., Apple Inc.">
-        </div>
-        <div class="input-row">
-          <div class="form-group">
-            <label class="form-label" for="buy-quantity">Quantity</label>
-            <input type="number" id="buy-quantity" class="form-input" placeholder="0" min="1">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="buy-price">Price per Share</label>
-            <div class="price-input-wrapper">
-              <input type="number" id="buy-price" class="form-input price-input" placeholder="0.00" step="0.01" min="0">
+        <form id="buyForm">
+            <div class="form-group">
+            <label class="form-label" for="buy-symbol">Symbol</label>
+            <input type="text" id="buy-symbol" class="form-input" placeholder="e.g., AAPL" maxlength="5" style="text-transform: uppercase;">
             </div>
-          </div>
-        </div>
-        <div class="button-group">
-          <button type="button" class="btn btn-secondary" onclick="closeBuyModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Complete Purchase</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Sell Modal -->
-  <div class="modal-overlay" id="sellModalOverlay" style="display: none;">
-    <div class="modal">
-      <button class="close-btn" onclick="closeSellModal()">×</button>
-      <div class="modal-header">
-        <h2 class="modal-title">Divest Holdings</h2>
-        <p class="modal-subtitle">Sell from Portfolio</p>
-      </div>
-      <form id="sellForm">
-        <div class="form-group">
-          <label class="form-label" for="sell-symbol">Symbol</label>
-          <input type="text" id="sell-symbol" class="form-input" placeholder="e.g., TSLA" maxlength="5" style="text-transform: uppercase;">
-        </div>
-        <div class="input-row">
-          <div class="form-group">
-            <label class="form-label" for="sell-quantity">Quantity</label>
-            <input type="number" id="sell-quantity" class="form-input" placeholder="0" min="1">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="sell-price">Sell Price</label>
-            <div class="price-input-wrapper">
-              <input type="number" id="sell-price" class="form-input price-input" placeholder="0.00" step="0.01" min="0">
+            <div class="form-group">
+            <label class="form-label" for="buy-name">Company Name</label>
+            <input type="text" id="buy-name" class="form-input" placeholder="e.g., Apple Inc.">
             </div>
-          </div>
+            <div class="input-row">
+            <div class="form-group">
+                <label class="form-label" for="buy-quantity">Quantity</label>
+                <input type="number" id="buy-quantity" class="form-input" placeholder="0" min="1">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="buy-price">Price per Share</label>
+                <div class="price-input-wrapper">
+                <input type="number" id="buy-price" class="form-input price-input" placeholder="0.00" step="0.01" min="0">
+                </div>
+            </div>
+            </div>
+            <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="closeBuyModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Complete Purchase</button>
+            </div>
+            <p id="buyConfirmation" class="confirmation-message" style="display: none;"></p>
+        </form>
         </div>
-        <div class="button-group">
-          <button type="button" class="btn btn-secondary" onclick="closeSellModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Confirm Sale</button>
-        </div>
-      </form>
     </div>
-  </div>
-
-  <script>
-    // Buy modal logic
-    function openBuyModal() {
-      document.getElementById('buyModalOverlay').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => document.getElementById('buy-symbol').focus(), 300);
-    }
-    function closeBuyModal() {
-      document.getElementById('buyModalOverlay').style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-
-    // Sell modal logic
-    function openSellModal() {
-      document.getElementById('sellModalOverlay').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => document.getElementById('sell-symbol').focus(), 300);
-    }
-    function closeSellModal() {
-      document.getElementById('sellModalOverlay').style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-
-    // Open modal handlers
-    const addBtn = Array.from(document.querySelectorAll(".action-btn")).find(btn => btn.textContent.includes("Add Investment"));
-    if (addBtn) addBtn.onclick = openBuyModal;
-
-    const sellBtn = Array.from(document.querySelectorAll(".action-btn")).find(btn => btn.textContent.includes("Sell Investment"));
-    if (sellBtn) sellBtn.onclick = openSellModal;
-
-    // Buy form submit
-    document.getElementById("buyForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const data = {
-        symbol: document.getElementById("buy-symbol").value,
-        name: document.getElementById("buy-name").value,
-        quantity: document.getElementById("buy-quantity").value,
-        price: document.getElementById("buy-price").value
-      };
-      await fetch("/api/buyStock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      this.reset();
-      closeBuyModal();
-    });
-
-    // Sell form submit
-    document.getElementById("sellForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const data = {
-        symbol: document.getElementById("sell-symbol").value,
-        quantity: document.getElementById("sell-quantity").value,
-        price: document.getElementById("sell-price").value
-      };
-      await fetch("/api/sellStock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-      this.reset();
-      closeSellModal();
-    });
+    
+    <!-- Sell Modal -->
+    <div class="modal-overlay" id="sellModalOverlay" style="display: none;">
+        <div class="modal">
+        <button class="close-btn" onclick="closeSellModal()">×</button>
+        <div class="modal-header">
+            <h2 class="modal-title">Divest Holdings</h2>
+            <p class="modal-subtitle">Sell from Portfolio</p>
+        </div>
+        <form id="sellForm">
+            <div class="form-group">
+            <label class="form-label" for="sell-symbol">Symbol</label>
+            <input type="text" id="sell-symbol" class="form-input" placeholder="e.g., TSLA" maxlength="5" style="text-transform: uppercase;">
+            </div>
+            <div class="input-row">
+            <div class="form-group">
+                <label class="form-label" for="sell-quantity">Quantity</label>
+                <input type="number" id="sell-quantity" class="form-input" placeholder="0" min="1">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="sell-price">Sell Price</label>
+                <div class="price-input-wrapper">
+                <input type="number" id="sell-price" class="form-input price-input" placeholder="0.00" step="0.01" min="0">
+                </div>
+            </div>
+            </div>
+            <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="closeSellModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Confirm Sale</button>
+            </div>
+            <p id="sellConfirmation" class="confirmation-message" style="display: none;"></p>
+        </form>
+        </div>
+    </div>
+    
+    <script>
+        function showMessage(id, message, isSuccess = true) {
+        const msgEl = document.getElementById(id);
+        msgEl.textContent = message;
+        msgEl.className = "confirmation-message " + (isSuccess ? "success" : "error");
+        msgEl.style.display = "block";
+        setTimeout(() => {
+            msgEl.style.opacity = "0";
+            setTimeout(() => {
+            msgEl.style.display = "none";
+            msgEl.style.opacity = "1";
+            msgEl.className = "confirmation-message";
+            msgEl.textContent = "";
+            }, 300);
+        }, 2500);
+        }
+    
+        // Buy modal logic
+        function openBuyModal() {
+        document.getElementById('buyModalOverlay').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('buy-symbol').focus(), 300);
+        }
+        function closeBuyModal() {
+        document.getElementById('buyModalOverlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        }
+    
+        // Sell modal logic
+        function openSellModal() {
+        document.getElementById('sellModalOverlay').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('sell-symbol').focus(), 300);
+        }
+        function closeSellModal() {
+        document.getElementById('sellModalOverlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        }
+    
+        // Modal open buttons
+        const addBtn = Array.from(document.querySelectorAll(".action-btn")).find(btn => btn.textContent.includes("Add Investment"));
+        if (addBtn) addBtn.onclick = openBuyModal;
+    
+        const sellBtn = Array.from(document.querySelectorAll(".action-btn")).find(btn => btn.textContent.includes("Sell Investment"));
+        if (sellBtn) sellBtn.onclick = openSellModal;
+    
+        // Buy form submit
+        document.getElementById("buyForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const data = {
+            symbol: document.getElementById("buy-symbol").value,
+            name: document.getElementById("buy-name").value,
+            quantity: document.getElementById("buy-quantity").value,
+            price: document.getElementById("buy-price").value
+        };
+        try {
+            const res = await fetch("/api/buyStock", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+            });
+            if (res.ok) {
+            showMessage("buyConfirmation", `Successfully bought ${data.quantity} shares of ${data.symbol}.`);
+            this.reset();
+            } else {
+            showMessage("buyConfirmation", "Purchase failed. Try again.", false);
+            }
+        } catch (err) {
+            showMessage("buyConfirmation", "An error occurred. Try again.", false);
+        }
+        });
+    
+        // Sell form submit
+        document.getElementById("sellForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const data = {
+            symbol: document.getElementById("sell-symbol").value,
+            quantity: document.getElementById("sell-quantity").value,
+            price: document.getElementById("sell-price").value
+        };
+        try {
+            const res = await fetch("/api/sellStock", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+            });
+            if (res.ok) {
+            showMessage("sellConfirmation", `Successfully sold ${data.quantity} shares of ${data.symbol}.`);
+            this.reset();
+            } else {
+            showMessage("sellConfirmation", "Sale failed. Try again.", false);
+            }
+        } catch (err) {
+            showMessage("sellConfirmation", "An error occurred. Try again.", false);
+        }
+        });
+    </script>
+  
   </script>
 </body>
 </html>
