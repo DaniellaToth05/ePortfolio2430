@@ -901,3 +901,13 @@ body {
     border-left-color: #cc4444;
 }
   
+
+.modal-overlay {
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  

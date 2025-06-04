@@ -122,8 +122,8 @@
         <div class="modal">
         <button class="close-btn" onclick="closeBuyModal()">×</button>
         <div class="modal-header">
-            <h2 class="modal-title">Acquire Investment</h2>
-            <p class="modal-subtitle">Add to Portfolio</p>
+            <h2 class="modal-title">Add Investment</h2>
+            <p class="modal-subtitle">To Portfolio</p>
         </div>
         <form id="buyForm">
             <div class="form-group">
@@ -160,8 +160,8 @@
         <div class="modal">
         <button class="close-btn" onclick="closeSellModal()">×</button>
         <div class="modal-header">
-            <h2 class="modal-title">Divest Holdings</h2>
-            <p class="modal-subtitle">Sell from Portfolio</p>
+            <h2 class="modal-title">Sell Investment</h2>
+            <p class="modal-subtitle">Remove from Portfolio</p>
         </div>
         <form id="sellForm">
             <div class="form-group">
@@ -188,6 +188,29 @@
         </form>
         </div>
     </div>
+
+    <!-- Search Modal -->
+    <div class="modal-overlay" id="searchModalOverlay" style="display: none;">
+        <div class="modal">
+        <button class="close-btn" onclick="closeSearchModal()">×</button>
+        <div class="modal-header">
+            <h2 class="modal-title">Portfolio Lookup</h2>
+            <p class="modal-subtitle">Search by Stock Symbol</p>
+        </div>
+        <form id="searchForm">
+            <div class="form-group">
+            <label class="form-label" for="search-symbol">Symbol</label>
+            <input type="text" id="search-symbol" class="form-input" placeholder="e.g., TSLA" maxlength="5" style="text-transform: uppercase;">
+            </div>
+            <div class="button-group">
+            <button type="button" class="btn btn-secondary" onclick="closeSearchModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+            <p id="searchResult" class="confirmation-message" style="display: none;"></p>
+        </form>
+        </div>
+    </div>
+  
     
     <script>
         function showMessage(id, message, isSuccess = true) {
@@ -285,8 +308,56 @@
             showMessage("sellConfirmation", "An error occurred. Try again.", false);
         }
         });
+
+        // Search modal logic
+        function openSearchModal() {
+        document.getElementById('searchModalOverlay').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('search-symbol').focus(), 300);
+        }
+        function closeSearchModal() {
+        document.getElementById('searchModalOverlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        }
+
+        // Open button
+        const searchBtn = Array.from(document.querySelectorAll(".action-btn")).find(btn => btn.textContent.includes("Portfolio Search"));
+        if (searchBtn) searchBtn.onclick = openSearchModal;
+
+        // Search form submit
+        document.getElementById("searchForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const symbol = document.getElementById("search-symbol").value;
+        const resultEl = document.getElementById("searchResult");
+
+        try {
+            const res = await fetch(`/api/lookupStock?symbol=${encodeURIComponent(symbol)}`);
+            if (res.ok) {
+            const data = await res.json();
+            resultEl.className = "confirmation-message success";
+            resultEl.textContent = `${data.symbol} – ${data.name}: ${data.quantity} shares @ $${data.price}`;
+            } else if (res.status === 404) {
+            resultEl.className = "confirmation-message error";
+            resultEl.textContent = `No holdings found for "${symbol}".`;
+            } else {
+            throw new Error("Lookup failed");
+            }
+        } catch (err) {
+            resultEl.className = "confirmation-message error";
+            resultEl.textContent = "Error searching. Please try again.";
+        }
+
+        resultEl.style.display = "block";
+        setTimeout(() => {
+            resultEl.style.opacity = "0";
+            setTimeout(() => {
+            resultEl.style.display = "none";
+            resultEl.style.opacity = "1";
+            resultEl.textContent = "";
+            }, 300);
+        }, 3000);
+        });
+
     </script>
-  
-  </script>
 </body>
 </html>
